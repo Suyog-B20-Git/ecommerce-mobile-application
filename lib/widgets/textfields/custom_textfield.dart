@@ -277,15 +277,55 @@ class DatePickerHelper {
       lastDate: lastDate,
       builder: (context, child) {
         return Theme(
-          data: ThemeData.dark().copyWith(
-            primaryColor: Colors.blue,
-            hintColor: Colors.white,
-            colorScheme: const ColorScheme.light(
-              primary: Colors.red,
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: const Color(0xFFD97706), // PremiumColors.gold
               onPrimary: Colors.white,
-              onSurface: Colors.black,
+              secondary: const Color(0xFFD97706),
+              onSecondary: Colors.white,
+              surface: Colors.white,
+              onSurface: Colors.black87,
+              background: Colors.white,
+              onBackground: Colors.black87,
+              error: Colors.red,
+              onError: Colors.white,
+              brightness: Brightness.light,
+              surfaceContainerHighest: Colors.grey[100],
+              secondaryContainer: Colors.grey[50],
             ),
-            dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
+            scaffoldBackgroundColor: Colors.white,
+            dialogBackgroundColor: Colors.white,
+            cardColor: Colors.white,
+            canvasColor: Colors.white,
+            primaryColor: const Color(0xFFD97706),
+            textTheme: TextTheme(
+              displayLarge: TextStyle(color: Colors.black87),
+              displayMedium: TextStyle(color: Colors.black87),
+              displaySmall: TextStyle(color: Colors.black87),
+              headlineLarge: TextStyle(color: Colors.black87),
+              headlineMedium: TextStyle(color: Colors.black87),
+              headlineSmall: TextStyle(color: Colors.black87),
+              titleLarge: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+              titleMedium: TextStyle(color: Colors.black87),
+              titleSmall: TextStyle(color: Colors.black87),
+              bodyLarge: TextStyle(color: Colors.black87),
+              bodyMedium: TextStyle(color: Colors.black87),
+              bodySmall: TextStyle(color: Colors.black87),
+              labelLarge: TextStyle(color: Colors.black87),
+              labelMedium: TextStyle(color: Colors.black87),
+              labelSmall: TextStyle(color: Colors.black87),
+            ),
+            datePickerTheme: DatePickerThemeData(
+              backgroundColor: Colors.white,
+              headerBackgroundColor: const Color(0xFFD97706),
+              headerForegroundColor: Colors.white,
+              dayStyle: TextStyle(color: Colors.black87),
+              weekdayStyle: TextStyle(color: Colors.black87),
+              yearStyle: TextStyle(color: Colors.black87),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
           ),
           child: child!,
         );

@@ -31,6 +31,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     authController = Get.find<AuthController>();
     dashboardController = Get.find<DashboardController>();
 
+    // Ensure shimmer shows immediately on app start
+    dashboardController.isLoading.value = true;
+    dashboardController.isBannersLoading.value = true;
+
     // Load dashboard data after build phase
     WidgetsBinding.instance.addPostFrameCallback((_) {
       dashboardController.loadDashboardData(context: context);

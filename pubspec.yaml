@@ -16,7 +16,7 @@ dependencies:
   # Maintain Alphabetical
   connectivity_plus: ^6.1.0
   cupertino_icons: ^1.0.8
-  device_info_plus: ^10.1.0
+  device_info_plus: ^10.1.2
   dio: ^5.7.0
   dotted_border: ^2.1.0
   dropdown_button2: ^2.3.9

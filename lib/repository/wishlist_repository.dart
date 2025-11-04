@@ -5,18 +5,32 @@ import '../models/product_model.dart';
 class WishlistRepository {
   static final APIManager _apiManager = APIManager();
 
-  // Get Wishlist
-  static Future<List<ProductModel>> getWishlist({BuildContext? context}) async {
+  // Get Wishlist with pagination
+  static Future<Map<String, dynamic>> getWishlist({
+    int page = 1,
+    int limit = 10,
+    BuildContext? context,
+  }) async {
     final response = await _apiManager.getAPICall(
-      url: '/wishlist',
+      url: '/wishlist?page=$page&limit=$limit',
       context: context,
     );
 
     if (response != null && response['status'] == 1) {
       final List<dynamic> productsData = response['data'] ?? [];
-      return productsData.map((json) => ProductModel.fromJson(json)).toList();
+      final products = productsData
+          .map((json) => ProductModel.fromJson(json))
+          .toList();
+      final pagination = response['pagination'] ?? {};
+      return {
+        'products': products,
+        'pagination': pagination,
+      };
     }
-    return [];
+    return {
+      'products': <ProductModel>[],
+      'pagination': {'page': page, 'limit': limit, 'total': 0, 'pages': 0},
+    };
   }
 
   // Add to Wishlist

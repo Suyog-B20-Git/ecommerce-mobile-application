@@ -95,8 +95,16 @@ class OrderController extends GetxController {
       );
 
       if (response['status'] == 1) {
-        // Reload orders to get updated list
-        await loadOrders(context: context, refresh: true);
+        // Optimistically add created order to local list to avoid immediate refetch
+        try {
+          final data = response['data'];
+          if (data != null) {
+            final created = OrderModel.fromJson(data);
+            orders.insert(0, created);
+          }
+        } catch (_) {
+          // If parsing fails, skip inserting; Orders list will refresh when opened
+        }
 
         if (context != null) {
           ToastHelper.showSuccessToast('Order placed successfully!');

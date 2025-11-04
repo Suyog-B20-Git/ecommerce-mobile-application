@@ -203,11 +203,29 @@ class ProductDetailScreen extends StatelessWidget {
     return Obx(() {
       List<String> images = [];
 
-      // Get images based on selected variant
-      if (controller.selectedVariant.value != null &&
-          controller.selectedVariant.value!.images.isNotEmpty) {
-        images = controller.selectedVariant.value!.images;
-      } else {
+      // Prefer images based on selected color (admin assigns images per color)
+      if (controller.selectedVariant.value != null) {
+        final selectedColor = controller.selectedVariant.value!.color;
+        final currentVariantImages = controller.selectedVariant.value!.images;
+
+        if (currentVariantImages.isNotEmpty) {
+          images = currentVariantImages;
+        } else if (selectedColor != null) {
+          // Find any variant with the same color that has images
+          final sameColorWithImages = controller.productData.value!.variants
+              .firstWhere(
+                (v) => v.color == selectedColor && v.images.isNotEmpty,
+                orElse: () => controller.selectedVariant.value!,
+              )
+              .images;
+          if (sameColorWithImages.isNotEmpty) {
+            images = sameColorWithImages;
+          }
+        }
+      }
+
+      // Fallback to product images or placeholder
+      if (images.isEmpty) {
         images = controller.productData.value!.images.isNotEmpty
             ? controller.productData.value!.images
             : ['https://via.placeholder.com/400x400?text=No+Image'];
@@ -231,7 +249,8 @@ class ProductDetailScreen extends StatelessWidget {
           child: Stack(
             children: [
               PageView.builder(
-                controller: PageController(),
+                key: ValueKey(images.join(',')),
+                controller: PageController(initialPage: 0, keepPage: false),
                 onPageChanged: (index) {
                   controller.changeImageIndex(index);
                 },
@@ -454,7 +473,7 @@ class ProductDetailScreen extends StatelessWidget {
                   ),
                   child: Text(
                     'Save ₹${(originalPrice - price).toStringAsFixed(0)}',
-                    style: TextHelper.size12(context).copyWith(
+                    style: TextHelper.size14(context).copyWith(
                       fontWeight: FontWeight.w600,
                       color: const Color(0xFFE11D48),
                     ),
@@ -723,7 +742,7 @@ class ProductDetailScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Specifications',
+            'Specification',
             style: TextHelper.size18(context).copyWith(
               fontWeight: FontWeight.bold,
               color: Get.find<ThemeController>().isDark
@@ -732,47 +751,51 @@ class ProductDetailScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 1.h),
-          ...controller.productData.value!.attributes
-              .map(
-                (attr) => Container(
-                  margin: EdgeInsets.only(bottom: 1.h),
-                  padding: EdgeInsets.all(2.w),
-                  decoration: BoxDecoration(
-                    color: Get.find<ThemeController>().isDark
-                        ? PremiumColors.grey700.withAlpha((0.5 * 255).toInt())
-                        : Colors.grey[50],
-                    borderRadius: BorderRadius.circular(8),
+          ...controller.productData.value!.attributes.map((attr) {
+            return Padding(
+              padding: EdgeInsets.only(bottom: 1.h),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 1.w,
+                    height: 1.w,
+                    margin: EdgeInsets.only(top: 0.8.h),
+                    decoration: BoxDecoration(
+                      color: Get.find<ThemeController>().isDark
+                          ? Colors.white
+                          : Colors.black,
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          attr.name,
-                          style: TextHelper.size14(context).copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Get.find<ThemeController>().isDark
-                                ? Colors.white
-                                : Colors.black,
-                          ),
+                  SizedBox(width: 2.w),
+                  Expanded(
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextHelper.size14(context).copyWith(
+                          color: Get.find<ThemeController>().isDark
+                              ? Colors.grey[300]
+                              : Colors.grey[700],
                         ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Text(
-                          attr.value.toString(),
-                          style: TextHelper.size14(context).copyWith(
-                            color: Get.find<ThemeController>().isDark
-                                ? Colors.grey[300]
-                                : Colors.grey[700],
+                        children: [
+                          TextSpan(
+                            text: '${attr.name}: ',
+                            style: TextHelper.size14(context).copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: Get.find<ThemeController>().isDark
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
-                        ),
+                          TextSpan(text: attr.value.toString()),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              )
-              .toList(),
+                ],
+              ),
+            );
+          }).toList(),
         ],
       ),
     );

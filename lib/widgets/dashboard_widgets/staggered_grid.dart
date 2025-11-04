@@ -48,7 +48,7 @@ class StaggeredGrid extends StatelessWidget {
           mainAxisSpacing: mainAxisSpacing,
           crossAxisSpacing: crossAxisSpacing,
         ),
-        itemCount: 4,
+        itemCount: items.length > 4 ? 4 : items.length,
         itemBuilder: (context, index) {
           final item = items[index];
           return _buildStaggeredItem(item, themeController, index);
@@ -166,7 +166,7 @@ class NewArrivalsGrid extends StatelessWidget {
         items: products,
         crossAxisCount: 2,
         childAspectRatio: 1.1, // Increased aspect ratio for better fit
-        mainAxisSpacing: 2.0, // Reduced spacing to prevent overflow
+        mainAxisSpacing: 4.5, // Reduced spacing to prevent overflow
         crossAxisSpacing: 2.5, // Reduced spacing to prevent overflow
         onItemTap: onItemTap,
         onFavorite: onFavorite,

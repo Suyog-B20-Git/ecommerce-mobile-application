@@ -29,8 +29,6 @@ class DashboardController extends GetxController {
   // Load dashboard data
   Future<void> loadDashboardData({BuildContext? context}) async {
     try {
-      // Add a small delay to ensure we're not in the build phase
-      await Future.delayed(Duration(milliseconds: 100));
       isLoading.value = true;
 
       // Load all dashboard data in parallel

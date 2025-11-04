@@ -82,6 +82,9 @@ class CartController extends GetxController {
       );
 
       if (response['status'] == 1) {
+        try {
+          print('[CartController] AddToCart success => ' + response.toString());
+        } catch (_) {}
         // Reload cart to get updated data (with delay to avoid build-time updates)
         WidgetsBinding.instance.addPostFrameCallback((_) async {
           await loadCart(context: context);
@@ -94,6 +97,9 @@ class CartController extends GetxController {
         }
         return true;
       } else {
+        try {
+          print('[CartController] AddToCart failed => ' + response.toString());
+        } catch (_) {}
         if (context != null) {
           CustomSnackBar.SnackBar.error(
             title: 'Error',
@@ -103,7 +109,7 @@ class CartController extends GetxController {
         return false;
       }
     } catch (e) {
-      print('Error adding to cart: $e');
+      print('[CartController] Error adding to cart: $e');
       if (context != null) {
         CustomSnackBar.SnackBar.error(
           title: 'Error',

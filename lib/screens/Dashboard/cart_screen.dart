@@ -9,6 +9,7 @@ import '../../utils/text_styles.dart';
 import '../../utils/color_helper.dart';
 import '../../models/cart_model.dart';
 import '../checkout/checkout_screen.dart';
+import '../../repository/product_repository.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -21,6 +22,7 @@ class _CartScreenState extends State<CartScreen> {
   // GetX reactive variables
   final RxBool _isCheckoutLoading = false.obs;
   final Rx<DateTime?> _lastClickTime = Rx<DateTime?>(null);
+  final Map<String, String> _imageCache = {};
 
   @override
   void initState() {
@@ -275,48 +277,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ],
                   ),
-                  child: cartItem.productImage.isNotEmpty
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            cartItem.productImage,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Colors.grey.shade300,
-                                      Colors.grey.shade400,
-                                    ],
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Icon(
-                                  Icons.image,
-                                  color: Colors.grey.shade600,
-                                  size: 8.w,
-                                ),
-                              );
-                            },
-                          ),
-                        )
-                      : Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.grey.shade300,
-                                Colors.grey.shade400,
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Icon(
-                            Icons.image,
-                            color: Colors.grey.shade600,
-                            size: 8.w,
-                          ),
-                        ),
+                  child: _buildCartItemImage(cartItem),
                 ),
 
                 SizedBox(width: 4.w),
@@ -683,7 +644,7 @@ class _CartScreenState extends State<CartScreen> {
                             .saveQuantitiesForCheckout(context: context);
 
                         if (success) {
-                          // Navigate to checkout screen directly
+                          // Navigate to checkout by replacing Cart to avoid returning to it
                           Get.to(() => const CheckoutScreen());
                         }
                       } catch (e) {
@@ -739,5 +700,79 @@ class _CartScreenState extends State<CartScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildCartItemImage(CartItem cartItem) {
+    // Prefer cached/fetched image if original is empty
+    final effectiveUrl = cartItem.productImage.isNotEmpty
+        ? cartItem.productImage
+        : _imageCache[cartItem.productId];
+
+    if (effectiveUrl != null && effectiveUrl.isNotEmpty) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Image.network(
+          effectiveUrl,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => _cartImagePlaceholder(),
+        ),
+      );
+    }
+
+    // If no URL, try to lazily fetch product and cache its first image
+    return FutureBuilder<String?>(
+      future: _fetchAndCacheProductImage(cartItem.productId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.data != null &&
+            snapshot.data!.isNotEmpty) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.network(
+              snapshot.data!,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  _cartImagePlaceholder(),
+            ),
+          );
+        }
+        return _cartImagePlaceholder();
+      },
+    );
+  }
+
+  Widget _cartImagePlaceholder() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.grey.shade300, Colors.grey.shade400],
+        ),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Icon(Icons.image, color: Colors.grey.shade600, size: 8.w),
+    );
+  }
+
+  Future<String?> _fetchAndCacheProductImage(String productId) async {
+    try {
+      // Avoid duplicate fetches
+      if (_imageCache.containsKey(productId)) return _imageCache[productId];
+      final product = await ProductRepository.getProduct(
+        productId: productId,
+        context: context,
+      );
+      final url =
+          (product?.variants.isNotEmpty == true &&
+              product!.variants.first.images.isNotEmpty)
+          ? product.variants.first.images.first
+          : (product?.images.isNotEmpty == true ? product!.images.first : null);
+      if (url != null && url.isNotEmpty) {
+        _imageCache[productId] = url;
+        return url;
+      }
+    } catch (e) {
+      // ignore
+    }
+    return null;
   }
 }

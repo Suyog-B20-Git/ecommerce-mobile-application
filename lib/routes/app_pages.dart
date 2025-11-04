@@ -4,7 +4,12 @@ import '../screens/auth/register_screen.dart';
 import '../screens/dashboard/dashboard_screen.dart';
 import '../screens/onboarding/onboarding_screen.dart';
 import '../screens/product/product_detail_screen.dart';
+import '../screens/product/product_list_screen.dart';
+import '../screens/search/global_search_screen.dart';
 import '../screens/splash/splash_screen.dart';
+import '../screens/profile/edit_profile_screen.dart';
+import '../screens/address/addresses_screen.dart';
+import '../screens/wishlist/wishlist_screen.dart';
 import 'routes.dart';
 
 class AppPages {
@@ -52,6 +57,39 @@ class AppPages {
         productId: Get.arguments['productId'] ?? '',
         product: Get.arguments['product'],
       ),
+      transition: transition,
+    ),
+    GetPage(
+      name: Routes.PRODUCT_LIST_SCREEN,
+      page: () => const ProductListScreen(),
+      transition: transition,
+    ),
+
+    /// Search
+    GetPage(
+      name: Routes.SEARCH_SCREEN,
+      page: () => const GlobalSearchScreen(),
+      transition: transition,
+    ),
+
+    /// Profile Screens
+    GetPage(
+      name: Routes.EDIT_PROFILE_SCREEN,
+      page: () => const EditProfileScreen(),
+      transition: transition,
+    ),
+
+    /// Address Screens
+    GetPage(
+      name: Routes.ADDRESS_SCREEN,
+      page: () => const AddressesScreen(),
+      transition: transition,
+    ),
+
+    /// Wishlist Screen
+    GetPage(
+      name: Routes.WISHLIST_SCREEN,
+      page: () => const WishlistScreen(),
       transition: transition,
     ),
   ];

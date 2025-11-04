@@ -57,6 +57,20 @@ class CartRepository {
     Map<String, dynamic>? variantAttributes,
     BuildContext? context,
   }) async {
+    // Debug logs for add to cart payload
+    try {
+      print(
+        '[CartRepository] AddToCart payload => productId: ' +
+            productId +
+            ', quantity: ' +
+            quantity.toString() +
+            ', variantId: ' +
+            (variantId?.toString() ?? 'null') +
+            ', variantAttributes: ' +
+            (variantAttributes?.toString() ?? 'null'),
+      );
+    } catch (_) {}
+
     final response = await _apiManager.postAPICall(
       url: '/cart',
       params: {
@@ -67,6 +81,9 @@ class CartRepository {
       },
       context: context,
     );
+    try {
+      print('[CartRepository] AddToCart response => ' + response.toString());
+    } catch (_) {}
     return response;
   }
 

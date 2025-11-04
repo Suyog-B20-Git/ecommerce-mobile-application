@@ -118,6 +118,20 @@ class ColorHelper {
   /// This method analyzes the RGB values to determine the dominant color family.
   /// It uses thresholds to classify colors into meaningful categories.
   static String _detectColorFamily(int r, int g, int b) {
+    // Handle near-black and near-white explicitly for better UX labels
+    final int maxC = [r, g, b].reduce((a, b) => a > b ? a : b);
+    final int minC = [r, g, b].reduce((a, b) => a < b ? a : b);
+    final int dr = (r - g).abs();
+    final int dg = (g - b).abs();
+    final int db = (b - r).abs();
+
+    // Near black
+    if (maxC < 70) return 'Black';
+    // Near white
+    if (minC > 235) return 'White';
+    // Neutral grays
+    if (dr < 15 && dg < 15 && db < 15) return 'Gray';
+
     // Calculate dominant color
     if (r > g && r > b) {
       if (r > 200 && g < 100 && b < 100) return 'Red';
@@ -134,12 +148,6 @@ class ColorHelper {
       if (b > 150 && r > 100 && g < 100) return 'Purple';
       if (b > 150 && r < 100 && g > 100) return 'Cyan';
       return 'Bluish';
-    } else if (r > 200 && g > 200 && b > 200) {
-      return 'Light';
-    } else if (r < 50 && g < 50 && b < 50) {
-      return 'Dark';
-    } else if (r > 100 && g > 100 && b > 100) {
-      return 'Gray';
     }
 
     return 'Mixed';

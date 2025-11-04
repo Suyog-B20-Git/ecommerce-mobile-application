@@ -22,7 +22,7 @@ class CustomBottomNavigation extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withAlpha((0.1 * 255).toInt()),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -92,7 +92,7 @@ class CustomBottomNavigation extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                fontSize: 10.sp,
+                fontSize: 12.sp,
                 color: isActive ? PremiumColors.gold : Colors.grey[600],
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
               ),
@@ -117,8 +117,8 @@ class CustomBottomNavigation extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: isActive
-                  ? PremiumColors.gold.withOpacity(0.3)
-                  : Colors.grey.withOpacity(0.2),
+                  ? PremiumColors.gold.withAlpha((0.3 * 255).toInt())
+                  : Colors.grey.withAlpha((0.2 * 255).toInt()),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),

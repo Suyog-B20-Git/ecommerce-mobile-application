@@ -16,6 +16,7 @@ class ProductModel {
   final String? categoryName;
   final String? subcategoryId;
   final List<ProductAttribute> attributes;
+  final List<ProductAttribute> attributesPreview;
   final int stock;
   final double price;
   final double discount;
@@ -50,6 +51,7 @@ class ProductModel {
     this.categoryName,
     this.subcategoryId,
     this.attributes = const [],
+    this.attributesPreview = const [],
     this.stock = 0,
     this.price = 0.0,
     this.discount = 0.0,
@@ -95,6 +97,11 @@ class ProductModel {
               ?.map((attr) => ProductAttribute.fromJson(attr))
               .toList() ??
           [],
+      attributesPreview:
+          (json['attributesPreview'] as List<dynamic>?)
+              ?.map((attr) => ProductAttribute.fromJson(attr))
+              .toList() ??
+          [],
       stock: json['stock'] ?? 0,
       price: (json['price'] ?? 0).toDouble(),
       discount: (json['discount'] ?? 0).toDouble(),
@@ -134,6 +141,9 @@ class ProductModel {
       'categoryName': categoryName,
       'subcategory': subcategoryId,
       'attributes': attributes.map((attr) => attr.toJson()).toList(),
+      'attributesPreview': attributesPreview
+          .map((attr) => attr.toJson())
+          .toList(),
       'stock': stock,
       'price': price,
       'discount': discount,

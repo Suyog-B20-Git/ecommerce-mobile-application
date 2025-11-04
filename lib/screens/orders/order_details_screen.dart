@@ -162,6 +162,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           _buildOrderHeader(),
           SizedBox(height: 3.h),
           _buildOrderStatus(),
+          if ((order!.notes != null && order!.notes!.isNotEmpty) || order!.status.toLowerCase() == 'cancelled') ...[
+            SizedBox(height: 2.h),
+            _buildCancellationNote(),
+          ],
           SizedBox(height: 3.h),
           _buildShippingAddress(),
           SizedBox(height: 3.h),
@@ -272,6 +276,48 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCancellationNote() {
+    return Container(
+      padding: EdgeInsets.all(4.w),
+      decoration: BoxDecoration(
+        color: themeController.isDark ? PremiumColors.grey800 : Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha((0.1 * 255).toInt()),
+            blurRadius: 10,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.info, color: Colors.red, size: 5.w),
+              SizedBox(width: 2.w),
+              Text(
+                'Cancellation Note',
+                style: TextHelper.size16(context).copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: themeController.isDark ? Colors.white : Colors.black,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 1.5.h),
+          Text(
+            order!.notes?.isNotEmpty == true
+                ? order!.notes!
+                : 'This order was cancelled.',
+            style: TextHelper.size14(context).copyWith(color: Colors.grey[600]),
           ),
         ],
       ),
@@ -717,11 +763,26 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   }
 
   void _showCancelOrderDialog() {
+    final TextEditingController reasonController = TextEditingController();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Cancel Order'),
-        content: Text('Are you sure you want to cancel this order?'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('Please provide a reason for cancellation.'),
+            SizedBox(height: 12),
+            TextField(
+              controller: reasonController,
+              maxLines: 3,
+              decoration: InputDecoration(
+                hintText: 'Enter reason (required)',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -729,8 +790,16 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           ),
           TextButton(
             onPressed: () {
+              final reason = reasonController.text.trim();
+              if (reason.isEmpty) {
+                CustomSnackBar.SnackBar.error(
+                  title: 'Reason required',
+                  message: 'Please enter a cancellation reason.',
+                );
+                return;
+              }
               Navigator.pop(context);
-              _cancelOrder();
+              _cancelOrder(reason: reason);
             },
             child: Text('Yes'),
           ),
@@ -739,10 +808,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     );
   }
 
-  Future<void> _cancelOrder() async {
+  Future<void> _cancelOrder({required String reason}) async {
     final success = await orderController.cancelOrder(
       order!.id,
-      reason: 'Cancelled by customer',
+      reason: reason,
       context: context,
     );
 

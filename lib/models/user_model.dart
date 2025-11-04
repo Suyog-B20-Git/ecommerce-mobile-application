@@ -197,7 +197,7 @@ class UserAddress {
     required this.city,
     required this.state,
     required this.pincode,
-    this.country = 'India',
+    this.country = '',
     this.isDefault = false,
   });
 
@@ -210,7 +210,7 @@ class UserAddress {
       city: json['city'] ?? '',
       state: json['state'] ?? '',
       pincode: json['pincode'] ?? '',
-      country: json['country'] ?? 'India',
+      country: json['country'] ?? '',
       isDefault: json['isDefault'] ?? false,
     );
   }

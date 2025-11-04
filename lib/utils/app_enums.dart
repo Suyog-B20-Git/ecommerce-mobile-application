@@ -8,7 +8,8 @@ enum StorageKey {
   userName,
   accessToken,
   refreshToken,
-  onboardingCompleted;
+  onboardingCompleted,
+  recentSearches;
 
   String get name => switch (this) {
     StorageKey.isLaunch => 'isLaunch',
@@ -19,6 +20,7 @@ enum StorageKey {
     StorageKey.accessToken => 'accessToken',
     StorageKey.refreshToken => 'refreshToken',
     StorageKey.onboardingCompleted => 'onboardingCompleted',
+    StorageKey.recentSearches => 'recentSearches',
   };
 }
 

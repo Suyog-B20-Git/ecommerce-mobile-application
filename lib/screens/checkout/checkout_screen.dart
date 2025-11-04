@@ -13,7 +13,7 @@ import '../../models/user_model.dart';
 import '../../repository/auth_repository.dart';
 import '../../widgets/textfields/custom_textfield.dart';
 import '../../widgets/snackbar.dart' as CustomSnackBar;
-import '../../routes/routes.dart';
+import '../Dashboard/dashboard_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -30,6 +30,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final _cityController = TextEditingController();
   final _stateController = TextEditingController();
   final _pincodeController = TextEditingController();
+  final _countryController = TextEditingController();
 
   // GetX reactive variables
   final RxString _selectedPaymentMethod = 'cash_on_delivery'.obs;
@@ -37,6 +38,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final RxInt _currentStep = 0.obs;
   final Rx<UserModel?> _userProfile = Rx<UserModel?>(null);
   final RxBool _isLoadingProfile = false.obs;
+  final RxInt _selectedAddressIndex = (-1).obs; // -1 means new address
 
   // Debouncing mechanism to prevent rapid clicks
   final Rx<DateTime?> _lastClickTime = Rx<DateTime?>(null);
@@ -86,17 +88,40 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       );
 
       print('Using address: ${defaultAddress.name}');
-      _nameController.text = defaultAddress.name;
-      _phoneController.text = defaultAddress.phone;
-      _addressController.text = defaultAddress.address;
-      _cityController.text = defaultAddress.city;
-      _stateController.text = defaultAddress.state;
-      _pincodeController.text = defaultAddress.pincode;
+      final defaultIndex = userProfile.addresses.indexOf(defaultAddress);
+      _selectedAddressIndex.value = defaultIndex;
+      _populateAddressFromSaved(defaultAddress);
     } else {
       // Fallback to basic profile data
       print('No saved addresses, using basic profile info');
+      _selectedAddressIndex.value = -1;
       _nameController.text = userProfile.name;
       _phoneController.text = userProfile.phone;
+    }
+  }
+
+  void _populateAddressFromSaved(UserAddress address) {
+    _nameController.text = address.name;
+    _phoneController.text = address.phone;
+    _addressController.text = address.address;
+    _cityController.text = address.city;
+    _stateController.text = address.state;
+    _pincodeController.text = address.pincode;
+    _countryController.text = address.country;
+  }
+
+  void _clearAddressFields() {
+    _nameController.clear();
+    _phoneController.clear();
+    _addressController.clear();
+    _cityController.clear();
+    _stateController.clear();
+    _pincodeController.clear();
+    _countryController.clear();
+    // Keep user's name and phone as defaults
+    if (_userProfile.value != null) {
+      _nameController.text = _userProfile.value!.name;
+      _phoneController.text = _userProfile.value!.phone;
     }
   }
 
@@ -108,6 +133,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     _cityController.dispose();
     _stateController.dispose();
     _pincodeController.dispose();
+    _countryController.dispose();
     super.dispose();
   }
 
@@ -452,6 +478,199 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ),
             SizedBox(height: 2.h),
 
+            // Show saved addresses if available
+            if (_userProfile.value?.addresses.isNotEmpty == true) ...[
+              Text(
+                'Saved Addresses',
+                style: TextHelper.size14(context).copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: themeController.isDark ? Colors.white : Colors.black,
+                ),
+              ),
+              SizedBox(height: 1.5.h),
+              Obx(
+                () => ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _userProfile.value!.addresses.length,
+                  itemBuilder: (context, index) {
+                    final address = _userProfile.value!.addresses[index];
+                    return GestureDetector(
+                      onTap: () {
+                        _selectedAddressIndex.value = index;
+                        _populateAddressFromSaved(address);
+                      },
+                      child: Obx(() {
+                        final isSelected = _selectedAddressIndex.value == index;
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 1.5.h),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? PremiumColors.gold.withAlpha(
+                                    (0.1 * 255).toInt(),
+                                  )
+                                : (themeController.isDark
+                                      ? PremiumColors.grey800
+                                      : Colors.grey[50]),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isSelected
+                                  ? PremiumColors.gold
+                                  : Colors.grey.withAlpha((0.3 * 255).toInt()),
+                              width: isSelected ? 2 : 1,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(3.w),
+                            child: Row(
+                              children: [
+                                // Selection indicator (replaces deprecated Radio usage)
+                                SizedBox(
+                                  width: 5.w,
+                                  height: 5.w,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: isSelected
+                                                ? PremiumColors.gold
+                                                : (themeController.isDark
+                                                      ? Colors.grey[600]!
+                                                      : Colors.grey[400]!),
+                                            width: 2,
+                                          ),
+                                        ),
+                                      ),
+                                      if (isSelected)
+                                        Container(
+                                          width: 2.4.w,
+                                          height: 2.4.w,
+                                          decoration: BoxDecoration(
+                                            color: PremiumColors.gold,
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 2.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            address.name,
+                                            style: TextHelper.size14(context)
+                                                .copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: themeController.isDark
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                ),
+                                          ),
+                                          SizedBox(width: 2.w),
+                                          if (address.isDefault)
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 2.w,
+                                                vertical: 0.3.h,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: PremiumColors.gold
+                                                    .withAlpha(
+                                                      (0.2 * 255).toInt(),
+                                                    ),
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                              ),
+                                              child: Text(
+                                                'Default',
+                                                style:
+                                                    TextHelper.size14(
+                                                      context,
+                                                    ).copyWith(
+                                                      color: PremiumColors.gold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 0.5.h),
+                                      Text(
+                                        address.phone,
+                                        style: TextHelper.size14(
+                                          context,
+                                        ).copyWith(color: Colors.grey[600]),
+                                      ),
+                                      SizedBox(height: 0.3.h),
+                                      Text(
+                                        '${address.address}, ${address.city}, ${address.state} - ${address.pincode}',
+                                        style: TextHelper.size14(
+                                          context,
+                                        ).copyWith(color: Colors.grey[600]),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: 2.h),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        _selectedAddressIndex.value = -1;
+                        _clearAddressFields();
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        size: 4.w,
+                        color: PremiumColors.gold,
+                      ),
+                      label: Text(
+                        'Add New Address',
+                        style: TextHelper.size14(context).copyWith(
+                          color: PremiumColors.gold,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: PremiumColors.gold, width: 1.5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 1.5.h),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3.h),
+              Divider(
+                color: Colors.grey.withAlpha((0.3 * 255).toInt()),
+                thickness: 1,
+              ),
+              SizedBox(height: 2.h),
+            ],
+
             // Name Field
             CustomTextField(
               controller: _nameController,
@@ -545,6 +764,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 }
                 if (value.length != 6) {
                   return 'Please enter a valid 6-digit pincode';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 2.h),
+
+            // Country Field
+            CustomTextField(
+              controller: _countryController,
+              labelText: 'Country',
+              prefixIcon: Icon(Icons.public),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your country';
                 }
                 return null;
               },
@@ -1094,34 +1327,43 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           // Next/Place Order Button
           Expanded(
             flex: _currentStep.value == 0 ? 1 : 2,
-            child: ElevatedButton(
-              onPressed: _isProcessing.value
-                  ? null
-                  : () {
-                      // Debouncing: Prevent clicks within 1 second
-                      final now = DateTime.now();
-                      if (_lastClickTime.value != null &&
-                          now.difference(_lastClickTime.value!).inMilliseconds <
-                              1000) {
-                        return;
-                      }
-                      _lastClickTime.value = now;
+            child: Obx(
+              () => ElevatedButton(
+                onPressed: _isProcessing.value
+                    ? null
+                    : () {
+                        // Quick debouncing: Prevent clicks within 300ms (reduced from 1000ms)
+                        final now = DateTime.now();
+                        if (_lastClickTime.value != null &&
+                            now
+                                    .difference(_lastClickTime.value!)
+                                    .inMilliseconds <
+                                300) {
+                          return;
+                        }
+                        _lastClickTime.value = now;
 
-                      if (_currentStep.value < 2) {
-                        _goToNextStep();
-                      } else {
-                        _placeOrder(context, cartController);
-                      }
-                    },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: PremiumColors.gold,
-                padding: EdgeInsets.symmetric(vertical: 2.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                        // Set processing immediately to prevent double clicks
+                        if (_currentStep.value < 2) {
+                          _goToNextStep();
+                        } else {
+                          // Validate form before placing order
+                          if (_formKey.currentState?.validate() ?? false) {
+                            _placeOrder(context, cartController);
+                          } else {
+                            // Form validation failed, reset debounce timer
+                            _lastClickTime.value = null;
+                          }
+                        }
+                      },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: PremiumColors.gold,
+                  padding: EdgeInsets.symmetric(vertical: 2.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-              ),
-              child: Obx(
-                () => _isProcessing.value
+                child: _isProcessing.value
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -1177,9 +1419,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     CartController cartController,
   ) async {
     // Additional check to prevent multiple processing
-    if (_isProcessing.value) return;
+    if (_isProcessing.value) {
+      print('Order already processing, ignoring duplicate call');
+      return;
+    }
 
+    // Set processing flag immediately to prevent double clicks
     _isProcessing.value = true;
+
+    // Small delay to ensure UI updates
+    await Future.delayed(const Duration(milliseconds: 50));
 
     try {
       // Create shipping address
@@ -1190,6 +1439,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         city: _cityController.text.trim(),
         state: _stateController.text.trim(),
         pincode: _pincodeController.text.trim(),
+        country: _countryController.text.trim(),
       );
 
       // Create order items from cart
@@ -1255,11 +1505,35 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       );
 
       if (success) {
-        // Clear cart without showing toast
-        await cartController.clearCart(context: context, showToast: false);
+        // Close all snackbars first
+        Get.closeAllSnackbars();
 
-        // Navigate back to dashboard with proper navigation
-        Get.offAllNamed(Routes.DASHBOARD_SCREEN);
+        // Navigate immediately to dashboard using direct widget with no transition
+        // This clears the entire navigation stack and prevents cart screen from showing
+        Get.offAll(
+          () => const DashboardScreen(),
+          predicate: (route) => false, // Remove all previous routes
+          transition:
+              Transition.noTransition, // Instant navigation, no animation
+        );
+
+        // Wait a frame to ensure navigation completes, then clear cart
+        // This prevents cart screen from showing during navigation
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          // Clear cart items locally after navigation is complete
+          cartController.cartItems.value = [];
+          cartController.cartModel.value = null;
+          cartController.subtotal.value = 0.0;
+
+          // Clear cart on backend in background
+          Future.microtask(() {
+            cartController.clearCart(context: null, showToast: false);
+          });
+        });
+      } else {
+        // Reset processing flag if order failed
+        _isProcessing.value = false;
+        _lastClickTime.value = null; // Reset debounce timer on failure
       }
     } catch (e) {
       print('Error placing order: $e');
@@ -1267,8 +1541,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         title: 'Error',
         message: 'Failed to place order. Please try again.',
       );
-    } finally {
+      // Reset processing flag on error
       _isProcessing.value = false;
+      _lastClickTime.value = null; // Reset debounce timer on error
     }
   }
 }

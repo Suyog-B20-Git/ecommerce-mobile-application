@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../api/api_manager.dart';
 import '../models/product_model.dart';
 import '../models/category_model.dart';
+import '../models/search_suggestion.dart';
 
 class ProductRepository {
   static final APIManager _apiManager = APIManager();
@@ -16,10 +17,56 @@ class ProductRepository {
     );
 
     if (response != null && response['status'] == 1) {
-      final List<dynamic> categoriesData = response['data'] ?? [];
+      // Support both paginated and non-paginated shapes
+      final List<dynamic> categoriesData =
+          (response['results'] as List<dynamic>?) ??
+          (response['data'] as List<dynamic>?) ??
+          [];
       return categoriesData
           .map((json) => CategoryModel.fromJson(json))
           .toList();
+    }
+    return [];
+  }
+
+  // Get Subcategories by category
+  static Future<List<Map<String, dynamic>>> getSubcategories({
+    String? categoryId,
+    BuildContext? context,
+  }) async {
+    final response = await _apiManager.getAPICall(
+      url: '/subcategories',
+      queryParameters: categoryId != null ? { 'categoryId': categoryId } : null,
+      context: context,
+    );
+
+    if (response != null && response['status'] == 1) {
+      final List<dynamic> data = response['data'] ?? [];
+      return data.cast<Map<String, dynamic>>();
+    }
+    return [];
+  }
+
+  // Get Products by subcategory (paginated)
+  static Future<List<ProductModel>> getSubcategoryProducts({
+    required String subcategoryId,
+    int page = 1,
+    int limit = 10,
+    BuildContext? context,
+  }) async {
+    final response = await _apiManager.getAPICall(
+      url: '/products',
+      queryParameters: {
+        'subcategory': subcategoryId,
+        'page': page,
+        'limit': limit,
+      },
+      context: context,
+    );
+
+    if (response != null && response['status'] == 1) {
+      final List<dynamic> productsData = response['results'] ?? response['data'] ?? [];
+      return productsData.map((json) => ProductModel.fromJson(json)).toList();
     }
     return [];
   }
@@ -134,6 +181,48 @@ class ProductRepository {
     if (response != null && response['status'] == 1) {
       final List<dynamic> productsData = response['data'] ?? [];
       return productsData.map((json) => ProductModel.fromJson(json)).toList();
+    }
+    return [];
+  }
+
+  // Search Suggestions (lightweight, top matches)
+  static Future<List<SearchSuggestion>> getSearchSuggestions({
+    required String query,
+    int limit = 8,
+    BuildContext? context,
+  }) async {
+    final response = await _apiManager.getAPICall(
+      url: '/search/suggestions',
+      queryParameters: {
+        'q': query,
+        'limit': limit,
+      },
+      context: context,
+    );
+
+    if (response != null && response['status'] == 1) {
+      final List<dynamic> data = response['data'] ?? [];
+      return data.map((json) => SearchSuggestion.fromJson(json)).toList();
+    }
+    return [];
+  }
+
+  // Recommendations (categories + subcategories)
+  static Future<List<SearchSuggestion>> getRecommendations({
+    int limit = 10,
+    BuildContext? context,
+  }) async {
+    final response = await _apiManager.getAPICall(
+      url: '/search/recommendations',
+      queryParameters: {
+        'limit': limit,
+      },
+      context: context,
+    );
+
+    if (response != null && response['status'] == 1) {
+      final List<dynamic> data = response['data'] ?? [];
+      return data.map((json) => SearchSuggestion.fromJson(json)).toList();
     }
     return [];
   }

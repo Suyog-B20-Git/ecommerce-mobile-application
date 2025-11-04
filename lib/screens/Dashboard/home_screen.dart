@@ -7,6 +7,8 @@ import 'package:sizer/sizer.dart';
 
 import '../../controller/theme_controller.dart';
 import '../../controller/auth_controller.dart';
+import '../../controller/cart_controller.dart';
+import '../../widgets/snackbar.dart' as CustomSnackBar;
 import '../../controller/dashboard_controller.dart';
 import '../../utils/theme_config.dart';
 import '../../routes/routes.dart';
@@ -177,6 +179,10 @@ class HomeScreen extends StatelessWidget {
                   ),
                   isDense: true,
                 ),
+                readOnly: true,
+                onTap: () {
+                  Get.toNamed(Routes.SEARCH_SCREEN);
+                },
               ),
             ),
           ),
@@ -629,7 +635,7 @@ Widget _buildCategoryChips(
                     // Category Name with Premium Typography
                     Text(
                       category.name,
-                      style: TextHelper.size12(context).copyWith(
+                      style: TextHelper.size14(context).copyWith(
                         // Reduced font size
                         color: themeController.isDark
                             ? Colors.white
@@ -715,7 +721,7 @@ Widget _buildFeaturedProducts(
                       // TODO: Toggle favorite
                     },
                     onAddToCart: () {
-                      // TODO: Add to cart
+                      _handleAddToCart(context, product);
                     },
                   );
                 },
@@ -775,7 +781,7 @@ Widget _buildTrendingProducts(
                   // TODO: Toggle favorite
                 },
                 onAddToCart: (product) {
-                  // TODO: Add to cart
+                  _handleAddToCart(context, product);
                 },
               );
             }),
@@ -833,7 +839,7 @@ Widget _buildNewArrivals(
                   // TODO: Toggle favorite
                 },
                 onAddToCart: (product) {
-                  // TODO: Add to cart
+                  _handleAddToCart(context, product);
                 },
               );
             }),
@@ -842,6 +848,63 @@ Widget _buildNewArrivals(
       ),
     ),
   );
+}
+
+void _handleAddToCart(BuildContext context, dynamic product) async {
+  try {
+    final cartController = Get.find<CartController>();
+
+    String productId = product.id ?? product['_id'] ?? '';
+    String? variantId;
+    Map<String, dynamic>? variantAttributes;
+
+    // Prefer first in-stock variant if available
+    if (product.variants != null && product.variants.isNotEmpty) {
+      final v = (product.variants as List).firstWhere(
+        (vv) => (vv.stock ?? vv['stock'] ?? 0) > 0,
+        orElse: () => product.variants.first,
+      );
+      variantId = v.sku ?? v['sku'];
+      final color = v.color ?? v['color'];
+      final size = v.size ?? v['size'];
+      variantAttributes = {
+        if (color != null) 'color': color,
+        if (size != null) 'size': size,
+      };
+    }
+
+    // Debug log payload
+    try {
+      print(
+        '[Home] AddToCart tapped => productId: ' +
+            productId +
+            ', variantId: ' +
+            (variantId?.toString() ?? 'null') +
+            ', attrs: ' +
+            (variantAttributes?.toString() ?? 'null'),
+      );
+    } catch (_) {}
+
+    final ok = await cartController.addToCart(
+      productId: productId,
+      quantity: 1,
+      variantId: variantId,
+      variantAttributes: variantAttributes,
+      context: context,
+    );
+
+    if (!ok) {
+      CustomSnackBar.SnackBar.error(
+        title: 'Add to Cart',
+        message: 'Failed to add item to cart',
+      );
+    }
+  } catch (e) {
+    CustomSnackBar.SnackBar.error(
+      title: 'Add to Cart',
+      message: 'Something went wrong',
+    );
+  }
 }
 
 Widget _buildBestSellers(

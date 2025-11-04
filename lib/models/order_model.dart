@@ -285,7 +285,7 @@ class OrderAddress {
     required this.city,
     required this.state,
     required this.pincode,
-    this.country = 'India',
+    this.country = '',
   });
 
   factory OrderAddress.fromJson(Map<String, dynamic> json) {
@@ -296,7 +296,7 @@ class OrderAddress {
       city: json['city'] ?? '',
       state: json['state'] ?? '',
       pincode: json['pincode'] ?? '',
-      country: json['country'] ?? 'India',
+      country: json['country'] ?? '',
     );
   }
 

@@ -41,7 +41,7 @@ class ProductDetailController extends GetxController {
 
       ProductModel? fetchedProduct;
 
-      // If product is already passed, use it directly without API call
+      // If product is already passed, use it first, then optionally refresh from API
       if (product != null) {
         print('Using passed product: ${product!.id}');
         fetchedProduct = product;
@@ -59,6 +59,24 @@ class ProductDetailController extends GetxController {
         // Set first variant as default if available
         if (fetchedProduct.variants.isNotEmpty) {
           selectedVariant.value = fetchedProduct.variants.first;
+        }
+
+        // If we used a passed product and it lacks attributes, refresh from API to get full details
+        if (product != null && (productData.value!.attributes.isEmpty)) {
+          try {
+            final refreshed = await ProductRepository.getProduct(
+              productId: productId,
+              context: Get.context,
+            );
+            if (refreshed != null && refreshed.attributes.isNotEmpty) {
+              productData.value = refreshed;
+              selectedVariant.value = refreshed.variants.isNotEmpty
+                  ? refreshed.variants.first
+                  : null;
+            }
+          } catch (e) {
+            print('Error refreshing product details: $e');
+          }
         }
 
         // Load related products only if we have a valid product
@@ -121,6 +139,7 @@ class ProductDetailController extends GetxController {
           );
           if (colorSizeMatch != null) {
             selectedVariant.value = colorSizeMatch;
+            currentImageIndex.value = 0;
             return;
           }
         }
@@ -130,6 +149,7 @@ class ProductDetailController extends GetxController {
         );
         if (firstSizeForColor != null) {
           selectedVariant.value = firstSizeForColor;
+          currentImageIndex.value = 0;
           return;
         }
       }
@@ -143,6 +163,7 @@ class ProductDetailController extends GetxController {
           );
           if (sizeColorMatch != null) {
             selectedVariant.value = sizeColorMatch;
+            currentImageIndex.value = 0;
             return;
           }
         }
@@ -152,6 +173,7 @@ class ProductDetailController extends GetxController {
         );
         if (firstColorForSize != null) {
           selectedVariant.value = firstColorForSize;
+          currentImageIndex.value = 0;
           return;
         }
       }
@@ -163,6 +185,7 @@ class ProductDetailController extends GetxController {
         );
         if (exactMatch != null) {
           selectedVariant.value = exactMatch;
+          currentImageIndex.value = 0;
           return;
         }
       }
@@ -170,6 +193,7 @@ class ProductDetailController extends GetxController {
 
     // Fallback to the selected variant
     selectedVariant.value = variant;
+    currentImageIndex.value = 0;
   }
 
   void incrementQuantity() {

@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 import '../../controller/theme_controller.dart';
 import '../../controller/auth_controller.dart';
 import '../../utils/theme_config.dart';
+import '../../utils/text_styles.dart';
 import '../../routes/routes.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -45,7 +46,10 @@ class ProfileScreen extends StatelessWidget {
       padding: EdgeInsets.all(6.w),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [PremiumColors.gold, PremiumColors.gold.withOpacity(0.8)],
+          colors: [
+            PremiumColors.gold,
+            PremiumColors.gold.withAlpha((0.8 * 255).toInt()),
+          ],
         ),
       ),
       child: Column(
@@ -55,13 +59,13 @@ class ProfileScreen extends StatelessWidget {
             radius: 8.w,
             backgroundColor: Colors.white,
             child: Text(
-              authController.currentUser.value?.name
-                      ?.substring(0, 1)
-                      .toUpperCase() ??
-                  'U',
-              style: TextStyle(
+              (authController.currentUser.value?.name != null
+                  ? authController.currentUser.value!.name
+                        .substring(0, 1)
+                        .toUpperCase()
+                  : 'U'),
+              style: TextHelper.size20(context).copyWith(
                 color: PremiumColors.gold,
-                fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -73,11 +77,9 @@ class ProfileScreen extends StatelessWidget {
           Obx(
             () => Text(
               authController.currentUser.value?.name ?? 'User',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextHelper.size18(
+                context,
+              ).copyWith(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
 
@@ -87,10 +89,9 @@ class ProfileScreen extends StatelessWidget {
           Obx(
             () => Text(
               authController.currentUser.value?.email ?? 'user@example.com',
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
-                fontSize: 14.sp,
-              ),
+              style: TextHelper.size14(
+                context,
+              ).copyWith(color: Colors.white.withAlpha((0.9 * 255).toInt())),
             ),
           ),
         ],
@@ -107,15 +108,16 @@ class ProfileScreen extends StatelessWidget {
       margin: EdgeInsets.all(4.w),
       decoration: BoxDecoration(
         color: themeController.isDark ? PremiumColors.grey800 : Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        // borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).toInt()),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
         ],
       ),
+      clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
           _buildProfileOption(
@@ -125,7 +127,7 @@ class ProfileScreen extends StatelessWidget {
             title: 'Edit Profile',
             subtitle: 'Update your personal information',
             onTap: () {
-              // TODO: Navigate to edit profile
+              Get.toNamed(Routes.EDIT_PROFILE_SCREEN);
             },
           ),
           _buildDivider(),
@@ -136,7 +138,7 @@ class ProfileScreen extends StatelessWidget {
             title: 'Addresses',
             subtitle: 'Manage your delivery addresses',
             onTap: () {
-              // TODO: Navigate to addresses
+              Get.toNamed(Routes.ADDRESS_SCREEN);
             },
           ),
           _buildDivider(),
@@ -158,7 +160,7 @@ class ProfileScreen extends StatelessWidget {
             title: 'Wishlist',
             subtitle: 'Your saved items',
             onTap: () {
-              // TODO: Navigate to wishlist
+              Get.toNamed(Routes.WISHLIST_SCREEN);
             },
           ),
           _buildDivider(),
@@ -226,8 +228,8 @@ class ProfileScreen extends StatelessWidget {
         padding: EdgeInsets.all(3.w),
         decoration: BoxDecoration(
           color: isDestructive
-              ? Colors.red.withOpacity(0.1)
-              : PremiumColors.gold.withOpacity(0.1),
+              ? Colors.red.withAlpha((0.1 * 255).toInt())
+              : PremiumColors.gold.withAlpha((0.1 * 255).toInt()),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Icon(
@@ -238,8 +240,7 @@ class ProfileScreen extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(
-          fontSize: 14.sp,
+        style: TextHelper.size16(context).copyWith(
           fontWeight: FontWeight.w600,
           color: isDestructive
               ? Colors.red
@@ -250,7 +251,7 @@ class ProfileScreen extends StatelessWidget {
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyle(fontSize: 12.sp, color: Colors.grey[600]),
+        style: TextHelper.size14(context).copyWith(color: Colors.grey[600]),
       ),
       trailing: Icon(
         Icons.arrow_forward_ios,
@@ -274,18 +275,22 @@ class ProfileScreen extends StatelessWidget {
           ),
           title: Text(
             'Logout',
-            style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+            style: TextHelper.size18(
+              context,
+            ).copyWith(fontWeight: FontWeight.bold),
           ),
           content: Text(
             'Are you sure you want to logout?',
-            style: TextStyle(fontSize: 14.sp),
+            style: TextHelper.size14(context),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 'Cancel',
-                style: TextStyle(color: Colors.grey[600], fontSize: 14.sp),
+                style: TextHelper.size14(
+                  context,
+                ).copyWith(color: Colors.grey[600]),
               ),
             ),
             TextButton(
@@ -295,11 +300,9 @@ class ProfileScreen extends StatelessWidget {
               },
               child: Text(
                 'Logout',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextHelper.size14(
+                  context,
+                ).copyWith(color: Colors.red, fontWeight: FontWeight.bold),
               ),
             ),
           ],

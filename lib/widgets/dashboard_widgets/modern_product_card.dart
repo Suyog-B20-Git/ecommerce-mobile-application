@@ -494,50 +494,50 @@ class _ModernProductCardState extends State<ModernProductCard>
           //   );
           // }),
           // SizedBox(height: 0.8.h),
-          _buildFloatingButton(
-            icon: Icons.shopping_cart_outlined,
-            color: Colors.white,
-            backgroundColor: const Color(0xFF0EA5E9), // Sky Blue
-            onTap: widget.onAddToCart,
-          ),
+          // _buildFloatingButton(
+          //   icon: Icons.shopping_cart_outlined,
+          //   color: Colors.white,
+          //   backgroundColor: const Color(0xFF0EA5E9), // Sky Blue
+          //   onTap: widget.onAddToCart,
+          // ),
         ],
       ),
     );
   }
 
-  Widget _buildFloatingButton({
-    required IconData icon,
-    required Color color,
-    Color? backgroundColor,
-    required VoidCallback? onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 9.w,
-        height: 9.w,
-        decoration: BoxDecoration(
-          color: backgroundColor ?? Colors.white,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha((0.15 * 255).toInt()),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-            BoxShadow(
-              color: (backgroundColor ?? Colors.white).withAlpha(
-                (0.3 * 255).toInt(),
-              ),
-              blurRadius: 4,
-              offset: const Offset(0, 1),
-            ),
-          ],
-        ),
-        child: Icon(icon, color: color, size: 4.5.w),
-      ),
-    );
-  }
+  // Widget _buildFloatingButton({
+  //   required IconData icon,
+  //   required Color color,
+  //   Color? backgroundColor,
+  //   required VoidCallback? onTap,
+  // }) {
+  //   return GestureDetector(
+  //     onTap: onTap,
+  //     child: Container(
+  //       width: 9.w,
+  //       height: 9.w,
+  //       decoration: BoxDecoration(
+  //         color: backgroundColor ?? Colors.white,
+  //         shape: BoxShape.circle,
+  //         boxShadow: [
+  //           BoxShadow(
+  //             color: Colors.black.withAlpha((0.15 * 255).toInt()),
+  //             blurRadius: 8,
+  //             offset: const Offset(0, 2),
+  //           ),
+  //           BoxShadow(
+  //             color: (backgroundColor ?? Colors.white).withAlpha(
+  //               (0.3 * 255).toInt(),
+  //             ),
+  //             blurRadius: 4,
+  //             offset: const Offset(0, 1),
+  //           ),
+  //         ],
+  //       ),
+  //       child: Icon(icon, color: color, size: 4.5.w),
+  //     ),
+  //   );
+  // }
 
   Widget _buildContentSection(ThemeController themeController) {
     return Expanded(
@@ -1263,51 +1263,51 @@ class _ModernProductCardState extends State<ModernProductCard>
               );
             }),
           ),
-          SizedBox(width: 1.5.w),
-          // Add to cart button
-          Expanded(
-            child: GestureDetector(
-              onTap: widget.onAddToCart,
-              child: Container(
-                height: 3.5.h,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [const Color(0xFF0EA5E9), const Color(0xFF0284C7)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(
-                        0xFF0EA5E9,
-                      ).withAlpha((0.3 * 255).toInt()),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.shopping_cart_outlined,
-                      color: Colors.white,
-                      size: 3.5.w,
-                    ),
-                    SizedBox(width: 0.8.w),
-                    Text(
-                      'Add to Cart',
-                      style: TextHelper.size14(context).copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          //   SizedBox(width: 1.5.w),
+          //   // Add to cart button
+          //   Expanded(
+          //     child: GestureDetector(
+          //       onTap: widget.onAddToCart,
+          //       child: Container(
+          //         height: 3.5.h,
+          //         decoration: BoxDecoration(
+          //           gradient: LinearGradient(
+          //             colors: [const Color(0xFF0EA5E9), const Color(0xFF0284C7)],
+          //             begin: Alignment.topLeft,
+          //             end: Alignment.bottomRight,
+          //           ),
+          //           borderRadius: BorderRadius.circular(8),
+          //           boxShadow: [
+          //             BoxShadow(
+          //               color: const Color(
+          //                 0xFF0EA5E9,
+          //               ).withAlpha((0.3 * 255).toInt()),
+          //               blurRadius: 8,
+          //               offset: const Offset(0, 2),
+          //             ),
+          //           ],
+          //         ),
+          //         child: Row(
+          //           mainAxisAlignment: MainAxisAlignment.center,
+          //           children: [
+          //             Icon(
+          //               Icons.shopping_cart_outlined,
+          //               color: Colors.white,
+          //               size: 3.5.w,
+          //             ),
+          //             SizedBox(width: 0.8.w),
+          //             Text(
+          //               'Add to Cart',
+          //               style: TextHelper.size14(context).copyWith(
+          //                 color: Colors.white,
+          //                 fontWeight: FontWeight.w600,
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
     );
