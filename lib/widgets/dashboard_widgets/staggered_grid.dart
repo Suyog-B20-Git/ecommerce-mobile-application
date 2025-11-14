@@ -151,6 +151,9 @@ class NewArrivalsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 4.w,
+      ), // Equal padding from left and right
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -166,8 +169,8 @@ class NewArrivalsGrid extends StatelessWidget {
         items: products,
         crossAxisCount: 2,
         childAspectRatio: 1.1, // Increased aspect ratio for better fit
-        mainAxisSpacing: 4.5, // Reduced spacing to prevent overflow
-        crossAxisSpacing: 2.5, // Reduced spacing to prevent overflow
+        mainAxisSpacing: 6.w, // Increased vertical spacing between rows
+        crossAxisSpacing: 4.w, // Increased horizontal spacing between columns
         onItemTap: onItemTap,
         onFavorite: onFavorite,
         onAddToCart: onAddToCart,

@@ -13,6 +13,7 @@ class ModernCarousel extends StatefulWidget {
   final double? height;
   final bool autoScroll;
   final Duration autoScrollDuration;
+  final bool showIndicators;
   final Function(dynamic)? onItemTap;
   final Function(dynamic)? onFavorite;
   final Function(dynamic)? onAddToCart;
@@ -24,6 +25,7 @@ class ModernCarousel extends StatefulWidget {
     this.height,
     this.autoScroll = true,
     this.autoScrollDuration = const Duration(seconds: 3),
+    this.showIndicators = true,
     this.onItemTap,
     this.onFavorite,
     this.onAddToCart,
@@ -106,7 +108,7 @@ class _ModernCarouselState extends State<ModernCarousel>
       child: Stack(
         children: [
           _buildCarousel(themeController),
-          _buildPageIndicators(themeController),
+          if (widget.showIndicators) _buildPageIndicators(themeController),
         ],
       ),
     );
@@ -169,13 +171,15 @@ class _ModernCarouselState extends State<ModernCarousel>
       if (widget.items.length <= 1) return const SizedBox();
 
       return Positioned(
-        bottom: 2.h,
+        bottom: 1.h,
+        // top: 2.h,
         left: 0,
         right: 0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
             widget.items.length,
+
             (index) => Container(
               margin: EdgeInsets.symmetric(horizontal: 1.w),
               width: _controller.currentIndex.value == index ? 6.w : 2.w,
@@ -270,24 +274,17 @@ class TrendingCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      // decoration: BoxDecoration(
-      //   gradient: LinearGradient(
-      //     colors: [
-      //       Colors.orange.withAlpha((0.05 * 255).toInt()),
-      //       Colors.orange.withAlpha((0.02 * 255).toInt()),
-      //     ],
-      //     begin: Alignment.topLeft,
-      //     end: Alignment.bottomRight,
-      //   ),
-      //   borderRadius: BorderRadius.circular(20),
-      // ),
+    return Container(
+      padding: EdgeInsets.only(
+        right: 1.w, // Only right padding, no left padding
+      ),
       child: ModernCarousel(
         items: products,
         cardType: 'trending',
         height: 35.h,
         autoScroll: true,
         autoScrollDuration: const Duration(seconds: 4),
+        showIndicators: false, // Hide indicators for trending carousel
         onItemTap: onItemTap,
         onFavorite: onFavorite,
         onAddToCart: onAddToCart,

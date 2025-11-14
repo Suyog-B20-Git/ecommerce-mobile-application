@@ -17,6 +17,7 @@ class Routes {
   /// Product Screens
   static const PRODUCT_LIST_SCREEN = "/product_list_screen";
   static const PRODUCT_DETAIL_SCREEN = "/product_detail_screen";
+  static const VIEW_ALL_PRODUCTS_SCREEN = "/view_all_products_screen";
   static const SEARCH_SCREEN = "/search_screen";
 
   /// Cart & Checkout

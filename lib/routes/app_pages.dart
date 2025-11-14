@@ -5,6 +5,7 @@ import '../screens/dashboard/dashboard_screen.dart';
 import '../screens/onboarding/onboarding_screen.dart';
 import '../screens/product/product_detail_screen.dart';
 import '../screens/product/product_list_screen.dart';
+import '../screens/product/view_all_products_screen.dart';
 import '../screens/search/global_search_screen.dart';
 import '../screens/splash/splash_screen.dart';
 import '../screens/profile/edit_profile_screen.dart';
@@ -62,6 +63,11 @@ class AppPages {
     GetPage(
       name: Routes.PRODUCT_LIST_SCREEN,
       page: () => const ProductListScreen(),
+      transition: transition,
+    ),
+    GetPage(
+      name: Routes.VIEW_ALL_PRODUCTS_SCREEN,
+      page: () => const ViewAllProductsScreen(),
       transition: transition,
     ),
 

@@ -57,6 +57,44 @@ class _ModernProductCardState extends State<ModernProductCard>
     super.dispose();
   }
 
+  // Responsive helper methods using Sizer
+  bool get _isSmallScreen => 100.w < 375;
+  bool get _isMediumScreen => 100.w >= 375 && 100.w < 768;
+  bool get _isLargeScreen => 100.w >= 768;
+  bool get _isTablet => 100.w >= 600;
+
+  // Responsive width multipliers
+  double get _widthMultiplier {
+    if (_isTablet) return 1.3;
+    if (_isLargeScreen) return 1.2;
+    if (_isMediumScreen) return 1.0;
+    return 0.95; // Small screen
+  }
+
+  // Responsive height multipliers
+  double get _heightMultiplier {
+    if (_isTablet) return 1.2;
+    if (_isLargeScreen) return 1.1;
+    if (_isMediumScreen) return 1.0;
+    return 0.95; // Small screen
+  }
+
+  // Responsive font size multipliers
+  double get _fontMultiplier {
+    if (_isTablet) return 1.2;
+    if (_isLargeScreen) return 1.15;
+    if (_isMediumScreen) return 1.05;
+    return 1.0; // Small screen
+  }
+
+  // Responsive padding multipliers
+  double get _paddingMultiplier {
+    if (_isTablet) return 1.3;
+    if (_isLargeScreen) return 1.2;
+    if (_isMediumScreen) return 1.1;
+    return 1.0; // Small screen
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeController = Get.find<ThemeController>();
@@ -103,20 +141,30 @@ class _ModernProductCardState extends State<ModernProductCard>
 
     // Standard design for other card types
     return Container(
-      width: widget.cardType == 'new'
-          ? 45.w
-          : 28.w, // Wider for new cards in grid
+      width:
+          (widget.cardType == 'new' ? 45.w : 28.w) *
+          _widthMultiplier, // Responsive width
       height: widget.cardType == 'new'
-          ? null
-          : 50.h, // Flexible height for new cards
+          ? (60.h * _heightMultiplier) // Increased height for new cards
+          : (50.h * _heightMultiplier), // Responsive height
       decoration: _getCardDecoration(themeController),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildImageSection(themeController),
-          _buildContentSection(themeController),
-        ],
-      ),
+      child: widget.cardType == 'new'
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Half image section (50% of container)
+                Expanded(flex: 1, child: _buildImageSection(themeController)),
+                // Half info section (50% of container)
+                Expanded(flex: 1, child: _buildContentSection(themeController)),
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildImageSection(themeController),
+                _buildContentSection(themeController),
+              ],
+            ),
     );
   }
 
@@ -215,11 +263,16 @@ class _ModernProductCardState extends State<ModernProductCard>
   Widget _buildImageSection(ThemeController themeController) {
     return Container(
       height: widget.cardType == 'new'
-          ? 16.h
-          : 32.h, // Better height for new cards visibility
+          ? null // Will be sized by Expanded parent for new cards
+          : (32.h *
+                _heightMultiplier), // Fixed responsive height for other cards
       decoration: BoxDecoration(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(widget.cardType == 'featured' ? 20 : 16),
+          bottom: widget.cardType == 'new'
+              ? Radius
+                    .zero // No bottom radius for new cards (info section below)
+              : Radius.zero,
         ),
         gradient: LinearGradient(
           colors: [Colors.grey[50]!, Colors.grey[100]!, Colors.grey[200]!],
@@ -256,6 +309,10 @@ class _ModernProductCardState extends State<ModernProductCard>
         child: ClipRRect(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(widget.cardType == 'featured' ? 20 : 16),
+            bottom: widget.cardType == 'new'
+                ? Radius
+                      .zero // No bottom radius for new cards
+                : Radius.zero,
           ),
           child: Stack(
             children: [
@@ -540,67 +597,91 @@ class _ModernProductCardState extends State<ModernProductCard>
   // }
 
   Widget _buildContentSection(ThemeController themeController) {
-    return Expanded(
-      child: Container(
-        padding: EdgeInsets.all(
-          widget.cardType == 'new' ? 1.w : 2.w,
-        ), // Reduced padding for new cards
-        decoration: BoxDecoration(
-          color: themeController.isDark
-              ? PremiumColors.grey800.withAlpha((0.5 * 255).toInt())
-              : Colors.white.withAlpha((0.9 * 255).toInt()),
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(widget.cardType == 'featured' ? 20 : 16),
-          ),
+    final contentWidget = Container(
+      padding: EdgeInsets.all(
+        (widget.cardType == 'new' ? 1.5.w : 2.w) * _paddingMultiplier,
+      ), // Responsive padding
+      decoration: BoxDecoration(
+        color: themeController.isDark
+            ? PremiumColors.grey800.withAlpha((0.5 * 255).toInt())
+            : Colors.white.withAlpha((0.9 * 255).toInt()),
+        borderRadius: BorderRadius.vertical(
+          top: widget.cardType == 'new'
+              ? Radius
+                    .zero // No top radius for new cards (directly below image)
+              : Radius.zero,
+          bottom: Radius.circular(widget.cardType == 'featured' ? 20 : 16),
         ),
+      ),
+      child: ClipRect(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: widget.cardType == 'new'
-              ? MainAxisAlignment.start
+              ? MainAxisAlignment
+                    .center // Center content for new cards
               : MainAxisAlignment.spaceBetween,
           children: [
-            _buildProductInfo(themeController),
+            Flexible(child: _buildProductInfo(themeController)),
             SizedBox(
-              height: widget.cardType == 'new' ? 0.3.h : 0.5.h,
-            ), // Better spacing for readability
+              height:
+                  (widget.cardType == 'new' ? 0.4.h : 0.5.h) *
+                  _heightMultiplier,
+            ), // Responsive spacing
             _buildPriceSection(themeController),
           ],
         ),
       ),
     );
+
+    // For 'new' cards, return Container directly (already inside Expanded)
+    // For other cards, wrap in Expanded
+    return widget.cardType == 'new'
+        ? contentWidget
+        : Expanded(child: contentWidget);
   }
 
   Widget _buildProductInfo(ThemeController themeController) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          _getProductName(),
-          style: widget.cardType == 'new'
-              ? TextHelper.size15(context).copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: themeController.isDark
-                      ? Colors.white
-                      : const Color(0xFF111827),
-                  height: 1.2,
-                )
-              : TextHelper.size15(context).copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: themeController.isDark
-                      ? Colors.white
-                      : const Color(0xFF111827),
-                  height: 1.1,
-                ),
-          maxLines: widget.cardType == 'new' ? 1 : 2,
-          overflow: TextOverflow.ellipsis,
-        ),
-        if (widget.cardType != 'new')
-          SizedBox(height: 0.2.h), // No spacing for new cards
-        if (widget.cardType != 'new')
-          _buildProductDescription(
-            themeController,
-          ), // No description for new cards
-      ],
+    return ClipRect(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            _getProductName(),
+            style: widget.cardType == 'new'
+                ? TextHelper.size15(context).copyWith(
+                    fontSize:
+                        (TextHelper.size15(context).fontSize ?? 15) *
+                        _fontMultiplier,
+                    fontWeight: FontWeight.w600,
+                    color: themeController.isDark
+                        ? Colors.white
+                        : const Color(0xFF111827),
+                    height: 1.2, // Responsive line height
+                  )
+                : TextHelper.size15(context).copyWith(
+                    fontSize:
+                        (TextHelper.size15(context).fontSize ?? 15) *
+                        _fontMultiplier,
+                    fontWeight: FontWeight.w600,
+                    color: themeController.isDark
+                        ? Colors.white
+                        : const Color(0xFF111827),
+                    height: 1.15, // Responsive line height
+                  ),
+            maxLines: widget.cardType == 'new'
+                ? 2
+                : 2, // Allow 2 lines for new cards too
+            overflow: TextOverflow.ellipsis,
+          ),
+          if (widget.cardType != 'new')
+            SizedBox(height: 0.2.h * _heightMultiplier), // Responsive spacing
+          if (widget.cardType != 'new')
+            _buildProductDescription(
+              themeController,
+            ), // No description for new cards
+        ],
+      ),
     );
   }
 
@@ -613,6 +694,7 @@ class _ModernProductCardState extends State<ModernProductCard>
     return Text(
       description,
       style: TextHelper.size9(context).copyWith(
+        fontSize: (TextHelper.size9(context).fontSize ?? 9) * _fontMultiplier,
         color: themeController.isDark
             ? Colors.grey[300]
             : const Color(0xFF6B7280),
@@ -638,38 +720,56 @@ class _ModernProductCardState extends State<ModernProductCard>
               '₹${price.toStringAsFixed(0)}',
               style: widget.cardType == 'new'
                   ? TextHelper.size14(context).copyWith(
+                      fontSize:
+                          (TextHelper.size14(context).fontSize ?? 14) *
+                          _fontMultiplier,
                       fontWeight: FontWeight.bold,
                       color: const Color(0xFF0EA5E9),
                     )
                   : TextHelper.size13(context).copyWith(
+                      fontSize:
+                          (TextHelper.size13(context).fontSize ?? 13) *
+                          _fontMultiplier,
                       fontWeight: FontWeight.bold,
                       color: const Color(0xFF0EA5E9),
                     ),
             ),
             if (originalPrice > price) ...[
               SizedBox(
-                width: widget.cardType == 'new' ? 1.w : 1.5.w,
-              ), // Reduced spacing for new cards
+                width:
+                    (widget.cardType == 'new' ? 1.w : 1.5.w) * _widthMultiplier,
+              ), // Responsive spacing
               Text(
                 '₹${originalPrice.toStringAsFixed(0)}',
                 style: widget.cardType == 'new'
                     ? TextHelper.size13(context).copyWith(
+                        fontSize:
+                            (TextHelper.size13(context).fontSize ?? 13) *
+                            _fontMultiplier,
                         color: const Color(0xFF6B7280),
                         decoration: TextDecoration.lineThrough,
                       )
                     : TextHelper.size10(context).copyWith(
+                        fontSize:
+                            (TextHelper.size10(context).fontSize ?? 10) *
+                            _fontMultiplier,
                         color: const Color(0xFF6B7280),
                         decoration: TextDecoration.lineThrough,
                       ),
               ),
               SizedBox(
-                width: widget.cardType == 'new' ? 0.5.w : 1.w,
-              ), // Reduced spacing for new cards
+                width:
+                    (widget.cardType == 'new' ? 0.5.w : 1.w) * _widthMultiplier,
+              ), // Responsive spacing
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: widget.cardType == 'new' ? 0.8.w : 1.w,
-                  vertical: widget.cardType == 'new' ? 0.1.h : 0.2.h,
-                ), // More compact for new cards
+                  horizontal:
+                      (widget.cardType == 'new' ? 0.8.w : 1.w) *
+                      _paddingMultiplier,
+                  vertical:
+                      (widget.cardType == 'new' ? 0.1.h : 0.2.h) *
+                      _heightMultiplier,
+                ), // Responsive padding
                 decoration: BoxDecoration(
                   color: const Color(0xFFE11D48).withAlpha((0.1 * 255).toInt()),
                   borderRadius: BorderRadius.circular(4),
@@ -678,10 +778,16 @@ class _ModernProductCardState extends State<ModernProductCard>
                   '$discountPercentage% OFF',
                   style: widget.cardType == 'new'
                       ? TextHelper.size13(context).copyWith(
+                          fontSize:
+                              (TextHelper.size13(context).fontSize ?? 13) *
+                              _fontMultiplier,
                           fontWeight: FontWeight.w600,
                           color: const Color(0xFFE11D48),
                         )
                       : TextHelper.size10(context).copyWith(
+                          fontSize:
+                              (TextHelper.size10(context).fontSize ?? 10) *
+                              _fontMultiplier,
                           fontWeight: FontWeight.w600,
                           color: const Color(0xFFE11D48),
                         ),
@@ -779,8 +885,9 @@ class _ModernProductCardState extends State<ModernProductCard>
         return Transform.scale(
           scale: _scaleAnimation.value,
           child: SizedBox(
-            width: 20.w, // More compact width for featured cards
-            height: 28.h, // Reduced height for more compact design
+            width:
+                20.w * _widthMultiplier, // Responsive width for featured cards
+            height: 28.h * _heightMultiplier, // Responsive height
             // decoration: BoxDecoration(
             //   borderRadius: BorderRadius.circular(16),
             //   boxShadow: [
@@ -888,7 +995,10 @@ class _ModernProductCardState extends State<ModernProductCard>
     final originalPrice = priceInfo['originalPrice'];
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
+      padding: EdgeInsets.symmetric(
+        horizontal: 3.w * _paddingMultiplier,
+        vertical: 2.h * _heightMultiplier,
+      ), // Responsive padding
       decoration: BoxDecoration(
         color: Colors.white.withAlpha((0.95 * 255).toInt()),
         borderRadius: const BorderRadius.only(
@@ -911,30 +1021,37 @@ class _ModernProductCardState extends State<ModernProductCard>
           Text(
             _getProductName(),
             style: TextHelper.size15(context).copyWith(
+              fontSize:
+                  (TextHelper.size15(context).fontSize ?? 15) * _fontMultiplier,
               fontWeight: FontWeight.w600,
               color: const Color(0xFF111827),
               height: 1.2,
             ),
-            maxLines: 1,
+            maxLines: 2, // Allow 2 lines to prevent overflow
             overflow: TextOverflow.ellipsis,
           ),
-          height(0.5.h),
-
+          SizedBox(height: 0.5.h * _heightMultiplier), // Responsive spacing
           // Price and discount row
           Row(
             children: [
               Text(
                 '₹${price.toStringAsFixed(0)}',
                 style: TextHelper.size14(context).copyWith(
+                  fontSize:
+                      (TextHelper.size14(context).fontSize ?? 14) *
+                      _fontMultiplier,
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF1E3A8A), // Deep Blue
                 ),
               ),
               if (originalPrice > price) ...[
-                width(1.w),
+                SizedBox(width: 1.w * _widthMultiplier), // Responsive spacing
                 Text(
                   '₹${originalPrice.toStringAsFixed(0)}',
                   style: TextHelper.size14(context).copyWith(
+                    fontSize:
+                        (TextHelper.size14(context).fontSize ?? 14) *
+                        _fontMultiplier,
                     color: const Color(0xFF6B7280),
                     decoration: TextDecoration.lineThrough,
                   ),
@@ -1031,8 +1148,9 @@ class _ModernProductCardState extends State<ModernProductCard>
         return Transform.scale(
           scale: _scaleAnimation.value,
           child: Container(
-            width: 32.w, // Wider for trending cards
-            height: 45.h, // Taller for more content
+            width:
+                32.w * _widthMultiplier, // Responsive width for trending cards
+            height: 45.h * _heightMultiplier, // Responsive height
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -1074,7 +1192,7 @@ class _ModernProductCardState extends State<ModernProductCard>
 
   Widget _buildTrendingImageSection(ThemeController themeController) {
     return Container(
-      height: 20.h, // 45% of card height
+      height: 20.h * _heightMultiplier, // Responsive height
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
         gradient: LinearGradient(
@@ -1102,7 +1220,9 @@ class _ModernProductCardState extends State<ModernProductCard>
 
     return Expanded(
       child: Container(
-        padding: EdgeInsets.all(2.5.w),
+        padding: EdgeInsets.all(
+          2.5.w * _paddingMultiplier,
+        ), // Responsive padding
         decoration: BoxDecoration(
           color: themeController.isDark ? PremiumColors.grey800 : Colors.white,
           borderRadius: const BorderRadius.vertical(
@@ -1116,37 +1236,43 @@ class _ModernProductCardState extends State<ModernProductCard>
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Product name
-            Text(
-              _getProductName(),
-              style: TextHelper.size14(context).copyWith(
-                fontWeight: FontWeight.w600,
-                color: themeController.isDark
-                    ? Colors.white
-                    : const Color(0xFF111827),
-                height: 1.3,
-                letterSpacing: 0.2,
+        child: ClipRect(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Product name - Fixed to prevent overflow
+              Flexible(
+                child: Text(
+                  _getProductName(),
+                  style: TextHelper.size14(context).copyWith(
+                    fontSize:
+                        (TextHelper.size14(context).fontSize ?? 14) *
+                        _fontMultiplier,
+                    fontWeight: FontWeight.w600,
+                    color: themeController.isDark
+                        ? Colors.white
+                        : const Color(0xFF111827),
+                    height: 1.25, // Slightly reduced to prevent overflow
+                    letterSpacing: 0.1,
+                  ),
+                  maxLines: 2, // Allow 2 lines
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            SizedBox(height: 1.h),
-
-            // Price section
-            _buildTrendingPriceSection(
-              themeController,
-              price,
-              originalPrice,
-              discountPercentage,
-            ),
-            SizedBox(height: 1.h),
-
-            // Action buttons
-            _buildTrendingActionButtons(themeController),
-          ],
+              SizedBox(height: 1.h * _heightMultiplier), // Responsive spacing
+              // Price section
+              _buildTrendingPriceSection(
+                themeController,
+                price,
+                originalPrice,
+                discountPercentage,
+              ),
+              SizedBox(height: 1.h * _heightMultiplier), // Responsive spacing
+              // Action buttons
+              _buildTrendingActionButtons(themeController),
+            ],
+          ),
         ),
       ),
     );
@@ -1165,28 +1291,33 @@ class _ModernProductCardState extends State<ModernProductCard>
         Text(
           '₹${price.toStringAsFixed(0)}',
           style: TextHelper.size16(context).copyWith(
+            fontSize:
+                (TextHelper.size16(context).fontSize ?? 16) * _fontMultiplier,
             fontWeight: FontWeight.bold,
             color: const Color(0xFF0EA5E9), // Sky Blue
           ),
         ),
 
         if (originalPrice > price) ...[
-          width(1.w),
+          SizedBox(width: 1.w * _widthMultiplier), // Responsive spacing
           Row(
             children: [
               Text(
                 '₹${originalPrice.toStringAsFixed(0)}',
                 style: TextHelper.size15(context).copyWith(
+                  fontSize:
+                      (TextHelper.size15(context).fontSize ?? 15) *
+                      _fontMultiplier,
                   color: const Color(0xFF6B7280),
                   decoration: TextDecoration.lineThrough,
                 ),
               ),
-              SizedBox(width: 1.w),
+              SizedBox(width: 1.w * _widthMultiplier), // Responsive spacing
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 1.5.w,
-                  vertical: 0.3.h,
-                ),
+                  horizontal: 1.5.w * _paddingMultiplier,
+                  vertical: 0.3.h * _heightMultiplier,
+                ), // Responsive padding
                 decoration: BoxDecoration(
                   color: const Color(0xFFE11D48).withAlpha((0.1 * 255).toInt()),
                   borderRadius: BorderRadius.circular(6),
@@ -1194,6 +1325,9 @@ class _ModernProductCardState extends State<ModernProductCard>
                 child: Text(
                   '$discountPercentage% OFF',
                   style: TextHelper.size14(context).copyWith(
+                    fontSize:
+                        (TextHelper.size14(context).fontSize ?? 14) *
+                        _fontMultiplier,
                     fontWeight: FontWeight.w600,
                     color: const Color(0xFFE11D48),
                   ),
@@ -1335,7 +1469,7 @@ class _ModernProductCardState extends State<ModernProductCard>
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.star, color: Colors.amber, size: 3.w),
-            width(0.5.w),
+            SizedBox(width: 0.5.w),
             Text(
               rating.toString(),
               style: TextHelper.size14(

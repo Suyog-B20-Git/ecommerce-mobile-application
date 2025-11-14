@@ -118,19 +118,6 @@ class HomeScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Hamburger Menu
-          IconButton(
-            onPressed: () {
-              // TODO: Open drawer
-            },
-            icon: Icon(
-              Icons.menu,
-              color: themeController.isDark
-                  ? Colors.white
-                  : PremiumColors.charcoal,
-            ),
-          ),
-
           // Search Bar
           Expanded(
             child: Container(
@@ -673,7 +660,14 @@ Widget _buildFeaturedProducts(
           // Modern Section Header
           FeaturedSectionHeader(
             onViewAll: () {
-              // TODO: Navigate to all featured products
+              Get.toNamed(
+                Routes.VIEW_ALL_PRODUCTS_SCREEN,
+                arguments: {
+                  'sectionType': 'featured',
+                  'products': dashboardController.featuredProducts,
+                  'title': 'All Featured Products',
+                },
+              );
             },
           ),
 
@@ -748,7 +742,14 @@ Widget _buildTrendingProducts(
           // Modern Section Header
           TrendingSectionHeader(
             onViewAll: () {
-              // TODO: Navigate to all trending products
+              Get.toNamed(
+                Routes.VIEW_ALL_PRODUCTS_SCREEN,
+                arguments: {
+                  'sectionType': 'trending',
+                  'products': dashboardController.trendingProducts,
+                  'title': 'All Trending Products',
+                },
+              );
             },
           ),
 
@@ -806,7 +807,14 @@ Widget _buildNewArrivals(
           // Modern Section Header
           NewArrivalsSectionHeader(
             onViewAll: () {
-              // TODO: Navigate to all new arrivals
+              Get.toNamed(
+                Routes.VIEW_ALL_PRODUCTS_SCREEN,
+                arguments: {
+                  'sectionType': 'new',
+                  'products': dashboardController.newArrivals,
+                  'title': 'All New Arrivals',
+                },
+              );
             },
           ),
 
@@ -921,7 +929,14 @@ Widget _buildBestSellers(
           // Modern Section Header
           BestSellersSectionHeader(
             onViewAll: () {
-              // TODO: Navigate to all best sellers
+              Get.toNamed(
+                Routes.VIEW_ALL_PRODUCTS_SCREEN,
+                arguments: {
+                  'sectionType': 'bestseller',
+                  'products': dashboardController.bestSellers,
+                  'title': 'All Best Sellers',
+                },
+              );
             },
           ),
 
