@@ -57,7 +57,7 @@ class _CartScreenState extends State<CartScreen> {
           : PremiumColors.softBackground,
       appBar: AppBar(
         title: Text(
-          'Shopping Cart',
+          'cart.title'.tr,
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
@@ -79,7 +79,7 @@ class _CartScreenState extends State<CartScreen> {
                       cartController.clearCart(context: context);
                     },
               child: Text(
-                'Clear All',
+                'cart.clear'.tr,
                 style: TextHelper.size14(context).copyWith(
                   color: cartController.cartItems.isEmpty
                       ? Colors.grey
@@ -141,7 +141,7 @@ class _CartScreenState extends State<CartScreen> {
           CircularProgressIndicator(color: PremiumColors.gold),
           SizedBox(height: 2.h),
           Text(
-            'Loading cart items...',
+            'common.loading'.tr,
             style: TextHelper.size16(context).copyWith(
               color: themeController.isDark
                   ? Colors.white
@@ -168,7 +168,7 @@ class _CartScreenState extends State<CartScreen> {
           ),
           SizedBox(height: 4.h),
           Text(
-            'Your Cart is Empty',
+            'cart.empty'.tr,
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
@@ -179,7 +179,7 @@ class _CartScreenState extends State<CartScreen> {
           ),
           SizedBox(height: 2.h),
           Text(
-            'Add some products to get started',
+            'cart.addItems'.tr,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 14.sp, color: Colors.grey[600]),
           ),
@@ -195,9 +195,9 @@ class _CartScreenState extends State<CartScreen> {
                 borderRadius: BorderRadius.circular(25),
               ),
             ),
-            child: Text(
-              'Start Shopping',
-              style: TextStyle(
+              child: Text(
+                'common.shop'.tr,
+                style: TextStyle(
                 color: Colors.white,
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
@@ -550,7 +550,7 @@ class _CartScreenState extends State<CartScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Subtotal:',
+                      'cart.subtotal'.tr,
                       style: TextHelper.size14(
                         context,
                       ).copyWith(color: Colors.grey[600]),
@@ -572,7 +572,7 @@ class _CartScreenState extends State<CartScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Discount:',
+                        'cart.discount'.tr,
                         style: TextHelper.size14(
                           context,
                         ).copyWith(color: Colors.grey[600]),
@@ -594,7 +594,7 @@ class _CartScreenState extends State<CartScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Total:',
+                      'cart.total'.tr,
                       style: TextHelper.size16(context).copyWith(
                         fontWeight: FontWeight.bold,
                         color: themeController.isDark
@@ -677,7 +677,7 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                           SizedBox(width: 2.w),
                           Text(
-                            'Processing...',
+                            'common.loading'.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 15.sp,
@@ -687,7 +687,7 @@ class _CartScreenState extends State<CartScreen> {
                         ],
                       )
                     : Text(
-                        'Proceed to Checkout',
+                        'cart.checkout'.tr,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 15.sp,

@@ -49,7 +49,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'Wishlist',
+          'wishlist.title'.tr,
           style: TextHelper.size18(context).copyWith(
             color: themeController.isDark ? Colors.white : Colors.black,
             fontWeight: FontWeight.w600,
@@ -334,7 +334,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
           ),
           SizedBox(height: 2.h),
           Text(
-            'Your wishlist is empty',
+            'wishlist.empty'.tr,
             style: TextHelper.size18(context).copyWith(
               fontWeight: FontWeight.w600,
               color: Colors.grey[600],
@@ -342,7 +342,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
           ),
           SizedBox(height: 1.h),
           Text(
-            'Start adding products you love!',
+            'wishlist.emptyMessage'.tr,
             style: TextHelper.size14(context).copyWith(
               color: Colors.grey[500],
             ),
@@ -384,20 +384,20 @@ class _WishlistScreenState extends State<WishlistScreen> {
             borderRadius: BorderRadius.circular(16),
           ),
           title: Text(
-            'Clear Wishlist',
+            'wishlist.clear'.tr,
             style: TextHelper.size18(context).copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
           content: Text(
-            'Are you sure you want to remove all items from your wishlist?',
+            'wishlist.clearConfirm'.tr,
             style: TextHelper.size14(context),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
-                'Cancel',
+                'common.cancel'.tr,
                 style: TextHelper.size14(context).copyWith(
                   color: Colors.grey[600],
                 ),
@@ -409,7 +409,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 wishlistController.clearWishlist(context: context);
               },
               child: Text(
-                'Clear',
+                'wishlist.clearButton'.tr,
                 style: TextHelper.size14(context).copyWith(
                   color: Colors.red,
                   fontWeight: FontWeight.bold,

@@ -166,7 +166,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         Expanded(
                           child: TextField(
                             decoration: InputDecoration(
-                              hintText: 'Search in this category',
+                              hintText: 'products.searchHint'.tr,
                               border: InputBorder.none,
                               errorBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,

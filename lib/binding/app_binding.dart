@@ -10,10 +10,12 @@ import '../controller/splash_controller.dart';
 import '../controller/theme_controller.dart';
 import '../controller/dashboard_controller.dart';
 import '../controller/wishlist_controller.dart';
+import '../controller/language_controller.dart';
 
 class AppBinding extends Bindings {
   @override
   void dependencies() {
+    Get.put<LanguageController>(LanguageController());
     Get.put<AppController>(AppController());
     Get.put<ThemeController>(ThemeController());
     Get.put<AuthController>(AuthController());

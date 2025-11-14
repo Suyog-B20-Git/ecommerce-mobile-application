@@ -59,7 +59,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           : PremiumColors.softBackground,
       appBar: AppBar(
         title: Text(
-          'My Orders',
+          'orders.myOrders'.tr,
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
@@ -133,7 +133,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           ),
           SizedBox(height: 4.h),
           Text(
-            'No Orders Yet',
+            'orders.noOrders'.tr,
             style: TextStyle(
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
@@ -144,7 +144,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           ),
           SizedBox(height: 2.h),
           Text(
-            'Your orders will appear here once you make a purchase',
+            'orders.emptyMessage'.tr,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 14.sp, color: Colors.grey[600]),
           ),
@@ -161,7 +161,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ),
             ),
             child: Text(
-              'Start Shopping',
+              'common.shop'.tr,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 14.sp,
@@ -202,7 +202,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Order #${order.orderNumber}',
+                  '${'orders.orderNumber'.tr} ${order.orderNumber}',
                   style: TextHelper.size15(context).copyWith(
                     fontWeight: FontWeight.bold,
                     color: themeController.isDark
@@ -233,7 +233,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
             // Order Items
             Text(
-              '${order.totalItems} item(s)',
+              '${order.totalItems} ${'orders.itemsCount'.tr}',
               style: TextHelper.size14(
                 context,
               ).copyWith(color: Colors.grey[600]),
@@ -246,7 +246,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total:',
+                  'orders.total'.tr,
                   style: TextHelper.size14(context).copyWith(
                     fontWeight: FontWeight.w600,
                     color: themeController.isDark
@@ -281,7 +281,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       ),
                     ),
                     child: Text(
-                      'View Details',
+                      'orders.viewDetails'.tr,
                       style: TextHelper.size13(context).copyWith(
                         color: PremiumColors.gold,
                         fontWeight: FontWeight.w600,
@@ -303,7 +303,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         ),
                       ),
                       child: Text(
-                        'Reorder',
+                        'orders.reorder'.tr,
                         style: TextHelper.size13(context).copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -329,7 +329,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           ),
           SizedBox(height: 2.h),
           Text(
-            'Loading orders...',
+            'common.loading'.tr,
             style: TextHelper.size14(context).copyWith(color: Colors.grey[600]),
           ),
         ],
@@ -352,12 +352,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Filter Orders'),
+        title: Text('orders.filterOrders'.tr),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-              title: Text('All Orders'),
+              title: Text('orders.filterAll'.tr),
               leading: Radio<String?>(
                 value: null,
                 groupValue: selectedStatus,
@@ -371,7 +371,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ),
             ),
             ListTile(
-              title: Text('Pending'),
+              title: Text('orders.status.pending'.tr),
               leading: Radio<String?>(
                 value: 'pending',
                 groupValue: selectedStatus,
@@ -385,7 +385,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ),
             ),
             ListTile(
-              title: Text('Confirmed'),
+              title: Text('orders.status.confirmed'.tr),
               leading: Radio<String?>(
                 value: 'confirmed',
                 groupValue: selectedStatus,
@@ -399,7 +399,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ),
             ),
             ListTile(
-              title: Text('Shipped'),
+              title: Text('orders.status.shipped'.tr),
               leading: Radio<String?>(
                 value: 'shipped',
                 groupValue: selectedStatus,
@@ -413,7 +413,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ),
             ),
             ListTile(
-              title: Text('Delivered'),
+              title: Text('orders.status.delivered'.tr),
               leading: Radio<String?>(
                 value: 'delivered',
                 groupValue: selectedStatus,
@@ -427,7 +427,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               ),
             ),
             ListTile(
-              title: Text('Cancelled'),
+              title: Text('orders.status.cancelled'.tr),
               leading: Radio<String?>(
                 value: 'cancelled',
                 groupValue: selectedStatus,
@@ -445,7 +445,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            child: Text('common.cancel'.tr),
           ),
         ],
       ),

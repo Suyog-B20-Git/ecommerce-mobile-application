@@ -141,8 +141,8 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
                   child: TextField(
                     controller: _textController,
                     autofocus: true,
-                    decoration: const InputDecoration(
-                      hintText: 'Search for products, category and more',
+                    decoration: InputDecoration(
+                      hintText: 'search.hint'.tr,
                       border: InputBorder.none,
                       errorBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
@@ -179,7 +179,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
         final hasTyped = _query.value.trim().isNotEmpty;
         return ListView(
           children: [
-            if (hasTyped) _sectionTitle('Suggestions'),
+            if (hasTyped) _sectionTitle('search.suggestions'.tr),
             if (hasTyped)
               Padding(
                 padding: EdgeInsets.only(bottom: 2.w),
@@ -243,7 +243,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
                   ),
                 ),
               ),
-            if (!hasTyped) _sectionTitle('Recommended'),
+            if (!hasTyped) _sectionTitle('search.recommended'.tr),
             if (!hasTyped)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4.w),
@@ -282,7 +282,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Recent searches',
+                      'search.recent'.tr,
                       style: TextHelper.size15(context).copyWith(
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
@@ -300,7 +300,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
                         color: Colors.black,
                       ),
                       label: Text(
-                        'Clear all',
+                        'search.clearAll'.tr,
                         style: TextHelper.size13(
                           context,
                         ).copyWith(color: Colors.black),
@@ -313,7 +313,7 @@ class _GlobalSearchScreenState extends State<GlobalSearchScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: Text(
-                  'No recent searches',
+                  'search.noRecent'.tr,
                   style: TextHelper.size13(
                     context,
                   ).copyWith(color: Colors.grey),

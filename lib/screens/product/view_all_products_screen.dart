@@ -19,7 +19,7 @@ class ViewAllProductsScreen extends StatelessWidget {
     // Get arguments passed from navigation
     final String sectionType = Get.arguments?['sectionType'] ?? 'featured';
     final List<dynamic> products = Get.arguments?['products'] ?? [];
-    final String title = Get.arguments?['title'] ?? 'All Products';
+    final String title = Get.arguments?['title'] ?? 'products.allProducts'.tr;
 
     return Scaffold(
       backgroundColor: themeController.isDark
@@ -113,7 +113,7 @@ class ViewAllProductsScreen extends StatelessWidget {
           ),
           SizedBox(height: 4.h),
           Text(
-            'No products available',
+            'products.noProducts'.tr,
             style: TextHelper.size18(context).copyWith(
               fontWeight: FontWeight.w600,
               color: themeController.isDark
@@ -123,7 +123,7 @@ class ViewAllProductsScreen extends StatelessWidget {
           ),
           SizedBox(height: 1.h),
           Text(
-            'Check back later for new items',
+            'products.checkBackLater'.tr,
             style: TextHelper.size14(context).copyWith(
               color: Colors.grey[500],
             ),
@@ -166,14 +166,14 @@ class ViewAllProductsScreen extends StatelessWidget {
 
       if (!ok) {
         CustomSnackBar.SnackBar.error(
-          title: 'Add to Cart',
-          message: 'Failed to add item to cart',
+          title: 'products.addToCart'.tr,
+          message: 'products.failedToAdd'.tr,
         );
       }
     } catch (e) {
       CustomSnackBar.SnackBar.error(
-        title: 'Add to Cart',
-        message: 'Something went wrong',
+        title: 'products.addToCart'.tr,
+        message: 'error.generic'.tr,
       );
     }
   }

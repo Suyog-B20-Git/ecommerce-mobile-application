@@ -36,7 +36,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           : PremiumColors.softBackground,
       appBar: AppBar(
         title: Text(
-          'Edit Profile',
+          'profileEdit.title'.tr,
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
@@ -133,14 +133,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             // Name Field
             CustomTextField(
               controller: profileController.nameController,
-              labelText: 'Full Name',
+              labelText: 'profileEdit.fullName'.tr,
               prefixIcon: Icon(Icons.person_outline),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your name';
+                  return 'profileEdit.nameRequired'.tr;
                 }
                 if (value.length < 2) {
-                  return 'Name must be at least 2 characters';
+                  return 'profileEdit.nameMinLength'.tr;
                 }
                 return null;
               },
@@ -154,15 +154,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             // Phone Field
             CustomTextField(
               controller: profileController.phoneController,
-              labelText: 'Phone Number',
+              labelText: 'profileEdit.phoneNumber'.tr,
               prefixIcon: Icon(Icons.phone_outlined),
               keyboardType: TextInputType.phone,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your phone number';
+                  return 'profileEdit.phoneRequired'.tr;
                 }
                 if (value.length < 10) {
-                  return 'Please enter a valid phone number';
+                  return 'profileEdit.phoneInvalid'.tr;
                 }
                 return null;
               },
@@ -172,7 +172,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             // Date of Birth Field
             CustomTextField(
               controller: profileController.dateOfBirthController,
-              labelText: 'Date of Birth',
+              labelText: 'profileEdit.dateOfBirth'.tr,
               prefixIcon: Icon(Icons.calendar_today_outlined),
               isDateField: true,
               allowFutureDates: false,
@@ -185,7 +185,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
             // Gender Selection
             Text(
-              'Gender',
+              'profileEdit.gender'.tr,
               style: TextHelper.size14(context).copyWith(
                 fontWeight: FontWeight.w600,
                 color: themeController.isDark ? Colors.white : Colors.black,
@@ -200,7 +200,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       context,
                       profileController,
                       'male',
-                      'Male',
+                      'profileEdit.male'.tr,
                       profileController.selectedGender.value == 'male',
                     ),
                   ),
@@ -210,7 +210,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       context,
                       profileController,
                       'female',
-                      'Female',
+                      'profileEdit.female'.tr,
                       profileController.selectedGender.value == 'female',
                     ),
                   ),
@@ -220,7 +220,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       context,
                       profileController,
                       'other',
-                      'Other',
+                      'profileEdit.other'.tr,
                       profileController.selectedGender.value == 'other',
                     ),
                   ),
@@ -262,7 +262,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ),
                       )
                     : Text(
-                        'Save Changes',
+                        'profileEdit.saveChanges'.tr,
                         style: TextHelper.size16(context).copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

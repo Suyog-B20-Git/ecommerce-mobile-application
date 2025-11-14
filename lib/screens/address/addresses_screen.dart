@@ -38,7 +38,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
           : PremiumColors.softBackground,
       appBar: AppBar(
         title: Text(
-          'My Addresses',
+          'addresses.title'.tr,
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
@@ -97,7 +97,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
           ),
           SizedBox(height: 3.h),
           Text(
-            'No addresses saved',
+            'addresses.empty'.tr,
             style: TextHelper.size18(context).copyWith(
               fontWeight: FontWeight.bold,
               color: themeController.isDark ? Colors.white : Colors.black,
@@ -105,7 +105,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
           ),
           SizedBox(height: 1.h),
           Text(
-            'Add your first address to get started',
+            'addresses.emptyMessage'.tr,
             style: TextHelper.size14(context).copyWith(color: Colors.grey[600]),
           ),
         ],
@@ -179,7 +179,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      'DEFAULT',
+                      'addresses.default'.tr,
                       style: TextHelper.size12(context).copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -232,7 +232,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
                           SizedBox(width: 2.w),
                           Expanded(
                             child: Text(
-                              'Set as Default',
+                              'addresses.setDefault'.tr,
                               style: TextHelper.size15(context),
                             ),
                           ),
@@ -252,7 +252,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
                           SizedBox(width: 2.w),
                           Expanded(
                             child: Text(
-                              'Edit',
+                              'common.edit'.tr,
                               style: TextHelper.size15(context),
                             ),
                           ),
@@ -272,7 +272,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
                           SizedBox(width: 2.w),
                           Expanded(
                             child: Text(
-                              'Delete',
+                              'addresses.delete'.tr,
                               style: TextHelper.size15(
                                 context,
                               ).copyWith(color: Colors.red),
@@ -353,7 +353,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
             },
             icon: Icon(Icons.add, color: Colors.white),
             label: Text(
-              'Add New Address',
+              'addresses.addAddress'.tr,
               style: TextHelper.size16(
                 context,
               ).copyWith(color: Colors.white, fontWeight: FontWeight.bold),
@@ -380,20 +380,20 @@ class _AddressesScreenState extends State<AddressesScreen> {
             borderRadius: BorderRadius.circular(16),
           ),
           title: Text(
-            'Delete Address',
+            'addresses.delete'.tr,
             style: TextHelper.size18(
               context,
             ).copyWith(fontWeight: FontWeight.bold),
           ),
           content: Text(
-            'Are you sure you want to delete this address?',
+            'addresses.deleteConfirm'.tr,
             style: TextHelper.size14(context),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
-                'Cancel',
+                'common.cancel'.tr,
                 style: TextHelper.size14(
                   context,
                 ).copyWith(color: Colors.grey[600]),
@@ -408,7 +408,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
                 );
               },
               child: Text(
-                'Delete',
+                'addresses.delete'.tr,
                 style: TextHelper.size14(
                   context,
                 ).copyWith(color: Colors.red, fontWeight: FontWeight.bold),

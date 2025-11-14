@@ -124,8 +124,8 @@ class ProfileScreen extends StatelessWidget {
             context: context,
             themeController: themeController,
             icon: Icons.person_outline,
-            title: 'Edit Profile',
-            subtitle: 'Update your personal information',
+            title: 'profile.editProfile'.tr,
+            subtitle: 'profile.editProfileSubtitle'.tr,
             onTap: () {
               Get.toNamed(Routes.EDIT_PROFILE_SCREEN);
             },
@@ -135,8 +135,8 @@ class ProfileScreen extends StatelessWidget {
             context: context,
             themeController: themeController,
             icon: Icons.location_on_outlined,
-            title: 'Addresses',
-            subtitle: 'Manage your delivery addresses',
+            title: 'profile.addresses'.tr,
+            subtitle: 'profile.addressesSubtitle'.tr,
             onTap: () {
               Get.toNamed(Routes.ADDRESS_SCREEN);
             },
@@ -146,8 +146,8 @@ class ProfileScreen extends StatelessWidget {
             context: context,
             themeController: themeController,
             icon: Icons.payment_outlined,
-            title: 'Payment Methods',
-            subtitle: 'Manage your payment options',
+            title: 'profile.paymentMethods'.tr,
+            subtitle: 'profile.paymentMethodsSubtitle'.tr,
             onTap: () {
               // TODO: Navigate to payment methods
             },
@@ -157,8 +157,8 @@ class ProfileScreen extends StatelessWidget {
             context: context,
             themeController: themeController,
             icon: Icons.favorite_outline,
-            title: 'Wishlist',
-            subtitle: 'Your saved items',
+            title: 'profile.wishlist'.tr,
+            subtitle: 'profile.wishlistSubtitle'.tr,
             onTap: () {
               Get.toNamed(Routes.WISHLIST_SCREEN);
             },
@@ -168,8 +168,8 @@ class ProfileScreen extends StatelessWidget {
             context: context,
             themeController: themeController,
             icon: Icons.notifications_outlined,
-            title: 'Notifications',
-            subtitle: 'Manage notification preferences',
+            title: 'profile.notifications'.tr,
+            subtitle: 'profile.notificationsSubtitle'.tr,
             onTap: () {
               // TODO: Navigate to notifications
             },
@@ -179,8 +179,8 @@ class ProfileScreen extends StatelessWidget {
             context: context,
             themeController: themeController,
             icon: Icons.help_outline,
-            title: 'Help & Support',
-            subtitle: 'Get help and contact support',
+            title: 'profile.helpSupport'.tr,
+            subtitle: 'profile.helpSupportSubtitle'.tr,
             onTap: () {
               // TODO: Navigate to help
             },
@@ -190,8 +190,8 @@ class ProfileScreen extends StatelessWidget {
             context: context,
             themeController: themeController,
             icon: Icons.info_outline,
-            title: 'About',
-            subtitle: 'App version and information',
+            title: 'profile.about'.tr,
+            subtitle: 'profile.aboutSubtitle'.tr,
             onTap: () {
               // TODO: Navigate to about
             },
@@ -201,8 +201,8 @@ class ProfileScreen extends StatelessWidget {
             context: context,
             themeController: themeController,
             icon: Icons.logout,
-            title: 'Logout',
-            subtitle: 'Sign out of your account',
+            title: 'profile.logout'.tr,
+            subtitle: 'profile.logoutSubtitle'.tr,
             onTap: () {
               _showLogoutDialog(context, authController);
             },
@@ -274,20 +274,20 @@ class ProfileScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
           ),
           title: Text(
-            'Logout',
+            'profile.logout'.tr,
             style: TextHelper.size18(
               context,
             ).copyWith(fontWeight: FontWeight.bold),
           ),
           content: Text(
-            'Are you sure you want to logout?',
+            'profile.logoutConfirm'.tr,
             style: TextHelper.size14(context),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
-                'Cancel',
+                'common.cancel'.tr,
                 style: TextHelper.size14(
                   context,
                 ).copyWith(color: Colors.grey[600]),
@@ -299,7 +299,7 @@ class ProfileScreen extends StatelessWidget {
                 authController.handleLogout(context);
               },
               child: Text(
-                'Logout',
+                'profile.logout'.tr,
                 style: TextHelper.size14(
                   context,
                 ).copyWith(color: Colors.red, fontWeight: FontWeight.bold),

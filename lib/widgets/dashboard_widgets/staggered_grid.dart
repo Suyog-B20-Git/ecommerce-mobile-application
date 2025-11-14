@@ -36,12 +36,14 @@ class StaggeredGrid extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 2.w,
-      ), // Reduced padding for more space
+      padding: EdgeInsets.only(
+        left: 2.w,
+        right: 2.w,
+      ), // Only horizontal padding, no bottom padding
       child: GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.zero, // Remove any default padding
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: crossAxisCount,
           childAspectRatio: childAspectRatio,
@@ -151,9 +153,11 @@ class NewArrivalsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 4.w,
-      ), // Equal padding from left and right
+      padding: EdgeInsets.only(
+        left: 4.w,
+        right: 4.w,
+        top: 2.h,
+      ), // Equal padding from left and right, top padding, no bottom padding
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [

@@ -154,7 +154,7 @@ class ModernSectionHeader extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              viewAllText ?? 'View All',
+              viewAllText ?? 'home.viewAll'.tr,
               style: TextHelper.size14(context).copyWith(
                 color: PremiumColors.gold,
                 fontWeight: FontWeight.w600,
@@ -178,8 +178,8 @@ class TrendingSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ModernSectionHeader(
-      title: '🔥 Trending Now',
-      subtitle: 'Most popular items this week',
+      title: '🔥 ${'home.trending'.tr}',
+      subtitle: 'home.trendingSubtitle'.tr,
       icon: Icons.trending_up,
       iconColor: Colors.orange,
       onViewAll: onViewAll,
@@ -196,8 +196,8 @@ class NewArrivalsSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ModernSectionHeader(
-      title: '✨ New Arrivals',
-      subtitle: 'Fresh products just added',
+      title: '✨ ${'home.newArrivals'.tr}',
+      subtitle: 'home.newArrivalsSubtitle'.tr,
       icon: Icons.new_releases,
       iconColor: Colors.green,
       onViewAll: onViewAll,
@@ -214,8 +214,8 @@ class BestSellersSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ModernSectionHeader(
-      title: '🏆 Best Sellers',
-      subtitle: 'Top rated products',
+      title: '🏆 ${'home.bestSellers'.tr}',
+      subtitle: 'home.bestSellersSubtitle'.tr,
       icon: Icons.emoji_events,
       iconColor: Colors.amber,
       onViewAll: onViewAll,
@@ -232,8 +232,8 @@ class FeaturedSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ModernSectionHeader(
-      title: '⭐ Featured Products',
-      subtitle: 'Handpicked for you',
+      title: '⭐ ${'home.featured'.tr}',
+      subtitle: 'home.featuredSubtitle'.tr,
       icon: Icons.star,
       iconColor: PremiumColors.gold,
       onViewAll: onViewAll,

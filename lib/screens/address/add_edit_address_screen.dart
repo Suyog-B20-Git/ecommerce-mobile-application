@@ -110,7 +110,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
           : PremiumColors.softBackground,
       appBar: AppBar(
         title: Text(
-          widget.address != null ? 'Edit Address' : 'Add Address',
+          widget.address != null ? 'addresses.editAddress'.tr : 'addresses.addAddress'.tr,
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
@@ -142,7 +142,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
             children: [
               // Address Type Selection
               Text(
-                'Address Type',
+                'checkout.address'.tr,
                 style: TextHelper.size14(context).copyWith(
                   fontWeight: FontWeight.w600,
                   color: themeController.isDark ? Colors.white : Colors.black,
@@ -151,11 +151,11 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
               SizedBox(height: 1.5.h),
               Row(
                 children: [
-                  Expanded(child: _buildTypeOption('home', 'Home')),
+                  Expanded(child: _buildTypeOption('home', 'addresses.home'.tr)),
                   SizedBox(width: 2.w),
-                  Expanded(child: _buildTypeOption('work', 'Work')),
+                  Expanded(child: _buildTypeOption('work', 'addresses.work'.tr)),
                   SizedBox(width: 2.w),
-                  Expanded(child: _buildTypeOption('other', 'Other')),
+                  Expanded(child: _buildTypeOption('other', 'addresses.other'.tr)),
                 ],
               ),
               SizedBox(height: 2.h),
@@ -163,11 +163,11 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
               // Name Field
               CustomTextField(
                 controller: _nameController,
-                labelText: 'Full Name',
+                labelText: 'checkout.fullName'.tr,
                 prefixIcon: Icon(Icons.person),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your full name';
+                    return 'addresses.nameRequired'.tr;
                   }
                   return null;
                 },
@@ -177,15 +177,15 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
               // Phone Field
               CustomTextField(
                 controller: _phoneController,
-                labelText: 'Phone Number',
+                labelText: 'checkout.phone'.tr,
                 prefixIcon: Icon(Icons.phone),
                 keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your phone number';
+                    return 'addresses.phoneRequired'.tr;
                   }
                   if (value.length < 10) {
-                    return 'Please enter a valid phone number';
+                    return 'profileEdit.phoneInvalid'.tr;
                   }
                   return null;
                 },
@@ -195,12 +195,12 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
               // Address Field
               CustomTextField(
                 controller: _addressController,
-                labelText: 'Address',
+                labelText: 'checkout.address'.tr,
                 prefixIcon: Icon(Icons.home),
                 maxLines: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your address';
+                    return 'addresses.addressRequired'.tr;
                   }
                   return null;
                 },
@@ -213,11 +213,11 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                   Expanded(
                     child: CustomTextField(
                       controller: _cityController,
-                      labelText: 'City',
+                      labelText: 'checkout.city'.tr,
                       prefixIcon: Icon(Icons.location_city),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your city';
+                          return 'addresses.cityRequired'.tr;
                         }
                         return null;
                       },
@@ -227,11 +227,11 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                   Expanded(
                     child: CustomTextField(
                       controller: _stateController,
-                      labelText: 'State',
+                      labelText: 'checkout.state'.tr,
                       prefixIcon: Icon(Icons.map),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your state';
+                          return 'addresses.stateRequired'.tr;
                         }
                         return null;
                       },
@@ -244,15 +244,15 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
               // Pincode Field
               CustomTextField(
                 controller: _pincodeController,
-                labelText: 'Pincode',
+                labelText: 'checkout.pincode'.tr,
                 prefixIcon: Icon(Icons.pin_drop),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your pincode';
+                    return 'addresses.pincodeRequired'.tr;
                   }
                   if (value.length != 6) {
-                    return 'Please enter a valid 6-digit pincode';
+                    return 'addresses.pincodeRequired'.tr;
                   }
                   return null;
                 },
@@ -262,11 +262,11 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
               // Country Field
               CustomTextField(
                 controller: _countryController,
-                labelText: 'Country',
+                labelText: 'checkout.country'.tr,
                 prefixIcon: Icon(Icons.public),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your country';
+                    return 'addresses.countryRequired'.tr;
                   }
                   return null;
                 },
@@ -327,7 +327,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Set as default address',
+                              'addresses.setDefault'.tr,
                               style: TextHelper.size14(context).copyWith(
                                 fontWeight: FontWeight.w600,
                                 color: themeController.isDark
@@ -337,7 +337,7 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                             ),
                             SizedBox(height: 0.3.h),
                             Text(
-                              'This address will be used as default for deliveries',
+                              'addresses.setDefaultDescription'.tr,
                               style: TextHelper.size12(context).copyWith(
                                 color: themeController.isDark
                                     ? Colors.grey[400]
@@ -379,8 +379,8 @@ class _AddEditAddressScreenState extends State<AddEditAddressScreen> {
                         )
                       : Text(
                           widget.address != null
-                              ? 'Update Address'
-                              : 'Save Address',
+                              ? 'addresses.updateAddress'.tr
+                              : 'addresses.saveAddress'.tr,
                           style: TextHelper.size16(context).copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,

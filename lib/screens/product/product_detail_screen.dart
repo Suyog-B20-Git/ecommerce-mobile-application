@@ -144,14 +144,14 @@ class ProductDetailScreen extends StatelessWidget {
             Icon(Icons.error_outline, size: 15.w, color: Colors.red),
             SizedBox(height: 2.h),
             Text(
-              'Failed to load product',
+              'products.failedToLoad'.tr,
               style: TextHelper.size18(
                 context,
               ).copyWith(fontWeight: FontWeight.w600, color: Colors.red),
             ),
             SizedBox(height: 1.h),
             Text(
-              'Please check your internet connection and try again.',
+              'products.loadError'.tr,
               textAlign: TextAlign.center,
               style: TextHelper.size14(
                 context,
@@ -163,7 +163,7 @@ class ProductDetailScreen extends StatelessWidget {
                 controller.loadProductDetails();
               },
               icon: Icon(Icons.refresh),
-              label: Text('Retry'),
+              label: Text('common.retry'.tr),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF0EA5E9),
                 foregroundColor: Colors.white,
@@ -289,7 +289,7 @@ class ProductDetailScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 1.h),
                             Text(
-                              'Failed to load image',
+                              'products.failedToLoadImage'.tr,
                               style: TextHelper.size14(
                                 context,
                               ).copyWith(color: Colors.grey[600]),
@@ -858,7 +858,7 @@ class ProductDetailScreen extends StatelessWidget {
                       ),
                       SizedBox(width: 1.w),
                       Text(
-                        'Add to Cart',
+                        'products.addToCart'.tr,
                         style: TextHelper.size16(context).copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

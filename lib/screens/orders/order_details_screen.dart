@@ -49,8 +49,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           isLoading = false;
         });
         CustomSnackBar.SnackBar.error(
-          title: 'Error',
-          message: 'Order not found',
+          title: 'error.generic'.tr,
+          message: 'orders.notFound'.tr,
         );
       }
     } catch (e) {
@@ -58,8 +58,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         isLoading = false;
       });
       CustomSnackBar.SnackBar.error(
-        title: 'Error',
-        message: 'Failed to load order details',
+        title: 'error.generic'.tr,
+        message: 'orders.loadFailed'.tr,
       );
     }
   }
@@ -72,7 +72,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           : Colors.grey[50],
       appBar: AppBar(
         title: Text(
-          'Order Details',
+          'orders.orderDetails'.tr,
           style: TextHelper.size18(context).copyWith(
             fontWeight: FontWeight.bold,
             color: themeController.isDark ? Colors.white : Colors.black,
@@ -104,7 +104,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           ),
           SizedBox(height: 2.h),
           Text(
-            'Loading order details...',
+            'orders.loadingDetails'.tr,
             style: TextHelper.size14(context).copyWith(color: Colors.grey[600]),
           ),
         ],
@@ -120,14 +120,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           Icon(Icons.error_outline, size: 10.w, color: Colors.red),
           SizedBox(height: 2.h),
           Text(
-            'Order not found',
+            'orders.notFound'.tr,
             style: TextHelper.size16(
               context,
             ).copyWith(fontWeight: FontWeight.bold, color: Colors.red),
           ),
           SizedBox(height: 1.h),
           Text(
-            'The order you are looking for does not exist.',
+            'orders.notFoundMessage'.tr,
             style: TextHelper.size14(context).copyWith(color: Colors.grey[600]),
             textAlign: TextAlign.center,
           ),
@@ -142,7 +142,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               ),
             ),
             child: Text(
-              'Go Back',
+              'common.back'.tr,
               style: TextHelper.size14(
                 context,
               ).copyWith(color: Colors.white, fontWeight: FontWeight.w600),
@@ -202,14 +202,14 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Order #${order!.orderNumber}',
+                '${'orders.orderNumber'.tr} ${order!.orderNumber}',
                 style: TextHelper.size16(context).copyWith(
                   fontWeight: FontWeight.bold,
                   color: themeController.isDark ? Colors.white : Colors.black,
                 ),
               ),
               Text(
-                '${order!.totalItems} items',
+                '${order!.totalItems} ${'orders.itemsCount'.tr}',
                 style: TextHelper.size14(
                   context,
                 ).copyWith(color: Colors.grey[600]),
@@ -218,7 +218,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           ),
           SizedBox(height: 1.h),
           Text(
-            'Placed on ${_formatDate(order!.createdAt)}',
+            '${'orders.placedOn'.tr} ${_formatDate(order!.createdAt)}',
             style: TextHelper.size14(context).copyWith(color: Colors.grey[600]),
           ),
         ],
@@ -244,7 +244,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Order Status',
+            'orders.orderStatus'.tr,
             style: TextHelper.size16(context).copyWith(
               fontWeight: FontWeight.bold,
               color: themeController.isDark ? Colors.white : Colors.black,
@@ -304,7 +304,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               Icon(Icons.info, color: Colors.red, size: 5.w),
               SizedBox(width: 2.w),
               Text(
-                'Cancellation Note',
+                'orders.cancellationNote'.tr,
                 style: TextHelper.size16(context).copyWith(
                   fontWeight: FontWeight.bold,
                   color: themeController.isDark ? Colors.white : Colors.black,
@@ -316,7 +316,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           Text(
             order!.notes?.isNotEmpty == true
                 ? order!.notes!
-                : 'This order was cancelled.',
+                : 'orders.cancelledMessage'.tr,
             style: TextHelper.size14(context).copyWith(color: Colors.grey[600]),
           ),
         ],
@@ -346,7 +346,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               Icon(Icons.location_on, color: PremiumColors.gold, size: 5.w),
               SizedBox(width: 2.w),
               Text(
-                'Shipping Address',
+                'orders.shippingAddress'.tr,
                 style: TextHelper.size16(context).copyWith(
                   fontWeight: FontWeight.bold,
                   color: themeController.isDark ? Colors.white : Colors.black,
@@ -400,7 +400,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Order Items',
+            'orders.items'.tr,
             style: TextHelper.size16(context).copyWith(
               fontWeight: FontWeight.bold,
               color: themeController.isDark ? Colors.white : Colors.black,
@@ -471,7 +471,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Qty: ${item.quantity}',
+                      '${'orders.quantity'.tr} ${item.quantity}',
                       style: TextHelper.size14(
                         context,
                       ).copyWith(color: Colors.grey[600]),
@@ -511,7 +511,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Order Summary',
+            'orders.orderSummary'.tr,
             style: TextHelper.size16(context).copyWith(
               fontWeight: FontWeight.bold,
               color: themeController.isDark ? Colors.white : Colors.black,
@@ -519,23 +519,23 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           ),
           SizedBox(height: 2.h),
           _buildSummaryRow(
-            'Subtotal',
+            'orders.subtotal'.tr,
             '₹${order!.subtotal.toStringAsFixed(0)}',
           ),
           _buildSummaryRow(
-            'Shipping',
+            'orders.shipping'.tr,
             '₹${order!.shippingCost.toStringAsFixed(0)}',
           ),
-          _buildSummaryRow('Tax', '₹${order!.taxAmount.toStringAsFixed(0)}'),
+          _buildSummaryRow('orders.tax'.tr, '₹${order!.taxAmount.toStringAsFixed(0)}'),
           if (order!.discountAmount > 0)
             _buildSummaryRow(
-              'Discount',
+              'orders.discount'.tr,
               '-₹${order!.discountAmount.toStringAsFixed(0)}',
               isDiscount: true,
             ),
           Divider(color: Colors.grey[300]),
           _buildSummaryRow(
-            'Total',
+            'orders.total'.tr,
             '₹${order!.totalAmount.toStringAsFixed(0)}',
             isTotal: true,
           ),
@@ -598,7 +598,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               Icon(Icons.local_shipping, color: PremiumColors.gold, size: 5.w),
               SizedBox(width: 2.w),
               Text(
-                'Tracking Information',
+                'orders.trackingInfo'.tr,
                 style: TextHelper.size16(context).copyWith(
                   fontWeight: FontWeight.bold,
                   color: themeController.isDark ? Colors.white : Colors.black,
@@ -610,7 +610,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           if (order!.trackingNumber != null &&
               order!.trackingNumber!.isNotEmpty)
             Text(
-              'Tracking Number: ${order!.trackingNumber}',
+              '${'orders.trackingNumber'.tr} ${order!.trackingNumber ?? ''}',
               style: TextHelper.size14(context).copyWith(
                 fontWeight: FontWeight.w600,
                 color: themeController.isDark ? Colors.white : Colors.black,
@@ -621,7 +621,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           if (order!.notes != null && order!.notes!.isNotEmpty) ...[
             SizedBox(height: 1.h),
             Text(
-              'Notes: ${order!.notes}',
+              '${'orders.notes'.tr} ${order!.notes ?? ''}',
               style: TextHelper.size14(
                 context,
               ).copyWith(color: Colors.grey[600]),
@@ -640,13 +640,13 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
     final steps = [
       {
-        'label': 'Order Confirmed',
+        'label': 'orders.timeline.confirmed'.tr,
         'time': confirmedAt,
         'active': confirmedAt != null,
       },
-      {'label': 'Shipped', 'time': shippedAt, 'active': shippedAt != null},
+      {'label': 'orders.timeline.shipped'.tr, 'time': shippedAt, 'active': shippedAt != null},
       {
-        'label': 'Delivered',
+        'label': 'orders.timeline.delivered'.tr,
         'time': deliveredAt,
         'active': deliveredAt != null,
       },
@@ -704,7 +704,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     ),
                     SizedBox(height: 0.3.h),
                     Text(
-                      time != null ? _formatDate(time) : 'Pending',
+                      time != null ? _formatDate(time) : 'orders.status.pending'.tr,
                       style: TextHelper.size14(
                         context,
                       ).copyWith(color: Colors.grey[600]),
@@ -748,7 +748,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   ),
                 ),
                 child: Text(
-                  'Cancel Order',
+                  'orders.cancelOrder'.tr,
                   style: TextHelper.size14(
                     context,
                   ).copyWith(color: Colors.white, fontWeight: FontWeight.w600),
@@ -767,17 +767,17 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Cancel Order'),
+        title: Text('orders.cancelOrder'.tr),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Please provide a reason for cancellation.'),
+            Text('orders.cancelReasonPrompt'.tr),
             SizedBox(height: 12),
             TextField(
               controller: reasonController,
               maxLines: 3,
               decoration: InputDecoration(
-                hintText: 'Enter reason (required)',
+                hintText: 'orders.cancelReasonHint'.tr,
                 border: OutlineInputBorder(),
               ),
             ),
@@ -786,22 +786,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('No'),
+            child: Text('common.no'.tr),
           ),
           TextButton(
             onPressed: () {
               final reason = reasonController.text.trim();
               if (reason.isEmpty) {
                 CustomSnackBar.SnackBar.error(
-                  title: 'Reason required',
-                  message: 'Please enter a cancellation reason.',
+                  title: 'orders.reasonRequired'.tr,
+                  message: 'orders.reasonRequiredMessage'.tr,
                 );
                 return;
               }
               Navigator.pop(context);
               _cancelOrder(reason: reason);
             },
-            child: Text('Yes'),
+            child: Text('common.yes'.tr),
           ),
         ],
       ),
@@ -840,17 +840,17 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   String _getStatusDescription(String status) {
     switch (status.toLowerCase()) {
       case 'pending':
-        return 'Your order is being processed';
+        return 'orders.statusDesc.pending'.tr;
       case 'confirmed':
-        return 'Your order has been confirmed';
+        return 'orders.statusDesc.confirmed'.tr;
       case 'shipped':
-        return 'Your order has been shipped';
+        return 'orders.statusDesc.shipped'.tr;
       case 'delivered':
-        return 'Your order has been delivered';
+        return 'orders.statusDesc.delivered'.tr;
       case 'cancelled':
-        return 'Your order has been cancelled';
+        return 'orders.statusDesc.cancelled'.tr;
       default:
-        return 'Unknown status';
+        return 'orders.statusDesc.unknown'.tr;
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controller/theme_controller.dart';
+import '../../controller/language_controller.dart';
 import '../../repository/product_repository.dart';
 import '../../models/category_model.dart';
 import '../../utils/theme_config.dart';
@@ -54,15 +55,19 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     final themeController = Get.find<ThemeController>();
+    final languageController = Get.find<LanguageController>();
+    final isRTL = languageController.isRTL;
     // final dashboardController = Get.find<DashboardController>();
 
-    return Scaffold(
+    return Directionality(
+      textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
+      child: Scaffold(
       backgroundColor: themeController.isDark
           ? PremiumColors.charcoal
           : PremiumColors.softBackground,
       appBar: AppBar(
         title: Text(
-          'Categories',
+          'nav.categories'.tr,
           style: TextHelper.size18(context).copyWith(
             fontWeight: FontWeight.bold,
             color: themeController.isDark
@@ -94,8 +99,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           return _buildEmptyState(context, themeController);
         }
         return Row(
+          textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
           children: [
-            // Left categories list
+            // Categories list (left in LTR, right in RTL)
             Container(
               width: 28.w,
               color: themeController.isDark
@@ -162,6 +168,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           Text(
                             c.name,
                             textAlign: TextAlign.center,
+                            textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
                             style: TextHelper.size14(context).copyWith(
                               fontWeight: selected
                                   ? FontWeight.w700
@@ -182,10 +189,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 },
               ),
             ),
-            // Right subcategories
+            // Subcategories (right in LTR, left in RTL)
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: isRTL ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(height: 2.h),
@@ -193,15 +200,22 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     height: 50,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
+                      reverse: isRTL, // Reverse scroll direction for RTL
                       padding: EdgeInsets.symmetric(horizontal: 4.w),
                       itemCount: _subcategories.length,
                       itemBuilder: (context, index) {
                         final s = _subcategories[index];
                         final sid = (s['_id'] ?? s['id'] ?? '').toString();
                         return Padding(
-                          padding: EdgeInsets.only(right: 2.w),
+                          padding: EdgeInsets.only(
+                            left: isRTL ? 2.w : 0,
+                            right: isRTL ? 0 : 2.w,
+                          ),
                           child: ChoiceChip(
-                            label: Text(s['name'] ?? ''),
+                            label: Text(
+                              s['name'] ?? '',
+                              textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
+                            ),
                             labelStyle: TextHelper.size16(context).copyWith(
                               fontWeight: FontWeight.w600,
                               color: themeController.isDark
@@ -224,7 +238,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                 '/product_list_screen',
                                 arguments: {
                                   'subcategoryId': sid,
-                                  'title': s['name'] ?? 'Products',
+                                  'title': s['name'] ?? 'products.title'.tr,
                                 },
                               );
                             },
@@ -239,6 +253,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ],
         );
       }),
+      ),
     );
   }
 
@@ -250,6 +265,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     BuildContext context,
     ThemeController themeController,
   ) {
+    final languageController = Get.find<LanguageController>();
+    final isRTL = languageController.isRTL;
+    
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -257,7 +275,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           Icon(Icons.category_outlined, size: 20.w, color: Colors.grey[400]),
           SizedBox(height: 4.h),
           Text(
-            'No Categories Available',
+            'categories.noCategories'.tr,
+            textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
             style: TextHelper.size16(context).copyWith(
               fontWeight: FontWeight.w600,
               color: themeController.isDark
@@ -267,8 +286,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ),
           SizedBox(height: 2.h),
           Text(
-            'Categories will appear here once they are added',
+            'categories.emptyMessage'.tr,
             textAlign: TextAlign.center,
+            textDirection: isRTL ? TextDirection.rtl : TextDirection.ltr,
             style: TextHelper.size14(context).copyWith(color: Colors.grey[600]),
           ),
         ],

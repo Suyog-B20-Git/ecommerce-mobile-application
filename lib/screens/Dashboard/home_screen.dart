@@ -18,6 +18,7 @@ import '../../widgets/dashboard_widgets/modern_section_header.dart';
 import '../../widgets/dashboard_widgets/modern_carousel.dart';
 import '../../widgets/dashboard_widgets/staggered_grid.dart';
 import '../../widgets/dashboard_widgets/modern_product_card.dart';
+import '../../widgets/language_switcher.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -142,7 +143,7 @@ class HomeScreen extends StatelessWidget {
                   height: 1.2,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Search products...',
+                  hintText: 'appBar.search'.tr,
                   filled: true,
                   fillColor: Colors.transparent,
                   hintStyle: TextStyle(
@@ -176,6 +177,11 @@ class HomeScreen extends StatelessWidget {
 
           width(2.w),
 
+          // Language Switcher
+          const LanguageSwitcher(),
+
+          width(1.w),
+
           // Notifications
           Stack(
             children: [
@@ -203,26 +209,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-
-          // Profile
-          GestureDetector(
-            onTap: () {
-              // TODO: Navigate to profile
-            },
-            child: CircleAvatar(
-              radius: 2.5.w,
-              backgroundColor: PremiumColors.gold,
-              child: Text(
-                (authController.currentUser.value?.name.substring(0, 1) ?? 'U')
-                    .toUpperCase(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12.sp,
-                ),
-              ),
-            ),
           ),
         ],
       ),
@@ -665,7 +651,7 @@ Widget _buildFeaturedProducts(
                 arguments: {
                   'sectionType': 'featured',
                   'products': dashboardController.featuredProducts,
-                  'title': 'All Featured Products',
+                  'title': 'products.allFeatured'.tr,
                 },
               );
             },
@@ -747,7 +733,7 @@ Widget _buildTrendingProducts(
                 arguments: {
                   'sectionType': 'trending',
                   'products': dashboardController.trendingProducts,
-                  'title': 'All Trending Products',
+                  'title': 'products.allTrending'.tr,
                 },
               );
             },
@@ -812,46 +798,46 @@ Widget _buildNewArrivals(
                 arguments: {
                   'sectionType': 'new',
                   'products': dashboardController.newArrivals,
-                  'title': 'All New Arrivals',
+                  'title': 'products.allNewArrivals'.tr,
                 },
               );
             },
           ),
 
           // Staggered Grid Layout (Pinterest-style)
-          SizedBox(
-            height: 45.h,
-            child: Obx(() {
-              if (dashboardController.isLoading.value) {
-                return _buildProductShimmer();
-              }
+          Obx(() {
+            if (dashboardController.isLoading.value) {
+              return SizedBox(height: 45.h, child: _buildProductShimmer());
+            }
 
-              if (dashboardController.newArrivals.isEmpty) {
-                return _buildEmptyProductsState(
+            if (dashboardController.newArrivals.isEmpty) {
+              return SizedBox(
+                height: 45.h,
+                child: _buildEmptyProductsState(
                   context,
                   themeController,
                   'No new arrivals available',
                   Icons.new_releases,
-                );
-              }
-
-              return NewArrivalsGrid(
-                products: dashboardController.newArrivals,
-                onItemTap: (product) {
-                  Get.toNamed(
-                    Routes.PRODUCT_DETAIL_SCREEN,
-                    arguments: {'productId': product.id, 'product': product},
-                  );
-                },
-                onFavorite: (product) {
-                  // TODO: Toggle favorite
-                },
-                onAddToCart: (product) {
-                  _handleAddToCart(context, product);
-                },
+                ),
               );
-            }),
-          ),
+            }
+
+            return NewArrivalsGrid(
+              products: dashboardController.newArrivals,
+              onItemTap: (product) {
+                Get.toNamed(
+                  Routes.PRODUCT_DETAIL_SCREEN,
+                  arguments: {'productId': product.id, 'product': product},
+                );
+              },
+              onFavorite: (product) {
+                // TODO: Toggle favorite
+              },
+              onAddToCart: (product) {
+                _handleAddToCart(context, product);
+              },
+            );
+          }),
         ],
       ),
     ),
@@ -934,7 +920,7 @@ Widget _buildBestSellers(
                 arguments: {
                   'sectionType': 'bestseller',
                   'products': dashboardController.bestSellers,
-                  'title': 'All Best Sellers',
+                  'title': 'products.allBestSellers'.tr,
                 },
               );
             },
